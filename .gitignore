@@ -13,5 +13,8 @@ prisma/dev.db
 prisma/dev.db-journal
 assets-raw
 
+# Local working notes — never part of the published repo
+HANDOFF.md
+
 .vercel
 .env*
