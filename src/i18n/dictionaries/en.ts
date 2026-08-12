@@ -1,0 +1,471 @@
+const en = {
+  meta: {
+    siteName: "GLARA",
+    tagline: "Floating vanity systems",
+    description:
+      "GLARA builds floating bathroom vanity systems in Egypt to German engineering standards. Marine-grade waterproof cores, CNC precision, lifetime structural warranty.",
+    homeTitle: "GLARA — Floating Vanity Systems",
+    unitsTitle: "Units",
+    customizeTitle: "Customize",
+    cartTitle: "Cart",
+    checkoutTitle: "Checkout",
+    accountTitle: "Account",
+  },
+
+  nav: {
+    units: "Units",
+    customize: "Customize",
+    search: "Search",
+    account: "Account",
+    cart: "Cart",
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
+    switchLanguage: "Switch to Arabic",
+    skipToContent: "Skip to content",
+  },
+
+  common: {
+    from: "from",
+    viewAll: "View all",
+    loading: "Loading",
+    error: "Something went wrong. Please try again.",
+    retry: "Retry",
+    close: "Close",
+    save: "Save",
+    cancel: "Cancel",
+    delete: "Delete",
+    edit: "Edit",
+    back: "Back",
+    next: "Next",
+    previous: "Previous",
+    continue: "Continue",
+    submit: "Submit",
+    optional: "optional",
+    required: "required",
+    quantity: "Quantity",
+    remove: "Remove",
+    total: "Total",
+    subtotal: "Subtotal",
+    shipping: "Shipping",
+    free: "Free",
+    email: "Email",
+    password: "Password",
+    name: "Full name",
+    phone: "Phone",
+    search: "Search",
+    language: "Language",
+    results: "Results",
+    result: "Result",
+    noResults: "No results",
+    clearFilters: "Clear filters",
+    sortBy: "Sort by",
+    yes: "Yes",
+    no: "No",
+    copied: "Copied",
+    signIn: "Sign in",
+    signOut: "Sign out",
+    createAccount: "Create account",
+  },
+
+  home: {
+    heroEyebrow: "Floating vanity systems",
+    heroScroll: "Scroll",
+    exploreTitle: "Explore collection",
+    exploreViewAll: "View all",
+    customizeTitle: "customize your vanity",
+    customizeSubtitle:
+      "Build your perfect vanity unit. Select materials, finishes, and dimensions in our 3D configurator.",
+    customizeSteps: [
+      { n: "1", title: "select", caption: "part" },
+      { n: "2", title: "finish", caption: "matte · gloss · wood" },
+      { n: "3", title: "preview", caption: "live 3D" },
+    ],
+    openLab: "Open lab",
+    badges: [
+      { title: "German Quality", caption: "DIN standards certified" },
+      { title: "Lifetime Warranty", caption: "Structural guarantee" },
+      { title: "100% Waterproof", caption: "Marine-grade core" },
+      { title: "Marine Core", caption: "Zero moisture absorption" },
+      { title: "CNC Precision", caption: "Micron-level accuracy" },
+    ],
+    silentLuxury: "Silent Luxury",
+    premiumMaterials: "Premium materials",
+    premiumMaterialsList: ["Italian Wood Veneer", "Greenlam Matte Finishes", "Leather Accent"],
+    waterproofCore: "Marine-grade waterproof core",
+    waterproofList: [
+      "100% moisture resistant",
+      "Guaranteed durability for bathroom environments",
+    ],
+    waterproofBadges: ["Waterproof", "Shield"],
+    engineeringEyebrow: "Engineering",
+    engineeringTitle: "German Standards. Egyptian Craftsmanship.",
+    engineeringTable: {
+      standard: "Standard",
+      specification: "Specification",
+      status: "Status",
+      certified: "Certified",
+      rows: [
+        { standard: "DIN 68930", spec: "Furniture surfaces resistant to liquids" },
+        { standard: "DIN EN 14322", spec: "Waterproof bonding for wet areas" },
+        { standard: "ISO 12720", spec: "Furniture strength and durability" },
+        { standard: "EN 15372", spec: "Marine plywood specifications" },
+      ],
+      note: "All GLARA products undergo rigorous quality testing and certification to meet international standards.",
+    },
+  },
+
+  units: {
+    title: "Units",
+    filters: "Filters",
+    type: "Type",
+    finish: "Finish",
+    price: "Price",
+    all: "All",
+    types: {
+      vanity: "Vanity",
+      mirror: "Mirror",
+      storage: "Storage",
+    },
+    finishes: {
+      matte: "Matte",
+      gloss: "Gloss",
+      wood: "Wood",
+    },
+    searchPlaceholder: "Search",
+    resultsCount: "{count} Results",
+    resultCount: "{count} Result",
+    sort: {
+      featured: "Featured",
+      priceAsc: "Price: low to high",
+      priceDesc: "Price: high to low",
+      newest: "Newest",
+    },
+    emptyTitle: "Nothing matches those filters",
+    emptyBody: "Adjust the filters, or browse the full collection.",
+    mirrorsSoonTitle: "The mirror collection lands soon",
+    mirrorsSoonBody:
+      "Backlit, demisted, engineered to the same standard as our vanities. Tell us where to send the first look.",
+    notifyMe: "Notify me",
+    notifySuccess: "You're on the list.",
+  },
+
+  product: {
+    finish: "Finish",
+    size: "Size",
+    addToCart: "Add to cart",
+    adding: "Adding…",
+    added: "Added to cart",
+    customize: "Customize",
+    specifications: "Specifications",
+    materials: "Materials (Greenlam)",
+    installationGuide: "Installation guide",
+    warranty: "Warranty",
+    gallery: "Product gallery",
+    viewImage: "View image {n}",
+    relatedTitle: "Pairs well with",
+    notFound: "That unit is no longer available.",
+    backToUnits: "Back to units",
+    inStock: "Made to order · 3–4 weeks",
+    saveToFavorites: "Save",
+    savedToFavorites: "Saved",
+  },
+
+  lab: {
+    title: "Customization lab",
+    subtitle: "Four decisions. One unit that fits your room exactly.",
+    stepOf: "Step {current} of {total}",
+    steps: {
+      unit: "Unit",
+      finish: "Finish",
+      size: "Size",
+      details: "Details",
+      preview: "Preview",
+    },
+    selectUnit: "Select a base unit",
+    selectFinish: "Choose the finish",
+    selectSize: "Choose the width",
+    hardware: "Hardware",
+    hardwareOptions: {
+      brushed: "Brushed steel",
+      black: "Matte black",
+      gold: "Brushed gold",
+    },
+    basin: "Basin",
+    basinOptions: {
+      integrated: "Integrated",
+      vessel: "Vessel",
+      double: "Double",
+    },
+    notes: "Notes for the workshop",
+    notesPlaceholder: "Plumbing offsets, wall type, anything we should know.",
+    yourConfiguration: "Your configuration",
+    estimatedTotal: "Estimated total",
+    saveConfig: "Save configuration",
+    addConfigToCart: "Add to cart",
+    savedAs: "Saved as {code}",
+    reset: "Start over",
+    priceNote: "Final price confirmed after a site measure.",
+  },
+
+  cart: {
+    title: "Cart",
+    empty: "Your cart is empty",
+    emptyBody: "Every GLARA unit is made to order. Start with the collection.",
+    browse: "Browse units",
+    item: "item",
+    items: "items",
+    orderSummary: "Order summary",
+    checkout: "Checkout",
+    continueShopping: "Continue shopping",
+    shippingNote: "Shipping calculated at checkout · Cairo & Giza included.",
+    custom: "Custom build",
+  },
+
+  checkout: {
+    title: "Checkout",
+    contact: "Contact",
+    delivery: "Delivery",
+    payment: "Payment",
+    review: "Review",
+    addressLine: "Address",
+    city: "City",
+    governorate: "Governorate",
+    postalCode: "Postal code",
+    notes: "Delivery notes",
+    notesPlaceholder: "Building, floor, preferred time.",
+    paymentMethods: {
+      cod: "Cash on delivery",
+      codCaption: "Pay the installation team on handover.",
+      bank: "Bank transfer",
+      bankCaption: "We send the account details with the confirmation.",
+    },
+    placeOrder: "Place order",
+    placing: "Placing order…",
+    agree: "By placing this order you accept the GLARA warranty and returns terms.",
+    orderPlaced: "Order placed",
+    orderNumber: "Order number",
+    thankYou: "Thank you, {name}.",
+    confirmationBody:
+      "Our production team will call you within one business day to confirm measurements and the delivery window.",
+    viewOrder: "View order",
+    emptyCart: "Your cart is empty.",
+  },
+
+  account: {
+    title: "Account",
+    signInTitle: "Sign in",
+    signInSubtitle: "Track orders and saved configurations.",
+    registerTitle: "Create an account",
+    registerSubtitle: "Faster checkout, saved builds, order history.",
+    noAccount: "No account yet?",
+    hasAccount: "Already have an account?",
+    orders: "Orders",
+    ordersEmpty: "No orders yet.",
+    favorites: "Saved units",
+    favoritesEmpty: "Nothing saved yet.",
+    configurations: "Saved configurations",
+    configurationsEmpty: "No saved configurations yet.",
+    profile: "Profile",
+    orderStatus: {
+      pending: "Pending",
+      confirmed: "Confirmed",
+      in_production: "In production",
+      shipped: "Shipped",
+      delivered: "Delivered",
+      cancelled: "Cancelled",
+    },
+    placedOn: "Placed {date}",
+  },
+
+  support: {
+    title: "Support",
+    installation: {
+      title: "Installation guide",
+      intro:
+        "Every GLARA unit ships with a wall-mount rail, a template, and torque-rated fixings. Installation takes one technician about ninety minutes.",
+      sections: [
+        {
+          title: "Before the team arrives",
+          body: "Have the water isolated at the shut-off and the wall clear to 20 cm beyond the unit on each side. Tiled walls are fine; we drill through glaze with a diamond bit.",
+        },
+        {
+          title: "Marking the rail",
+          body: "Tape the paper template to the wall at 85 cm from finished floor level. The plumbing rough-in has to land inside the shaded zone — if it doesn't, call us before drilling.",
+        },
+        {
+          title: "Fixings by wall type",
+          body: "Brick and block take the supplied 8 mm sleeve anchors. Drywall needs the backing plate in the box, fixed to studs — never to plasterboard alone.",
+        },
+        {
+          title: "Hanging and levelling",
+          body: "Lift the cabinet onto the rail, then adjust the two cams behind the top drawer until the shadow gap reads even along its full length.",
+        },
+      ],
+    },
+    warranty: {
+      title: "Warranty information",
+      intro:
+        "Ten years on the cabinet structure, five on the soft-close hardware, two on finishes. Registered at delivery, transferable with the property.",
+      sections: [
+        {
+          title: "What is covered",
+          body: "Delamination, swelling, structural failure of the carcass, and hardware that stops closing softly under normal domestic use.",
+        },
+        {
+          title: "What is not",
+          body: "Impact damage, installation by a third party outside our specification, and surface marks from abrasive or solvent-based cleaners.",
+        },
+        {
+          title: "Making a claim",
+          body: "Send your order number and photographs to info@glara-eg.com. We assess within two business days and repair on site wherever possible.",
+        },
+      ],
+    },
+    care: {
+      title: "Care instructions",
+      intro:
+        "Wipe with a damp microfibre cloth and a pH-neutral cleaner. No solvents, no abrasive pads, no steam.",
+      sections: [
+        {
+          title: "Daily",
+          body: "Dry standing water off the top with a soft cloth. The core will not absorb it, but hard water leaves mineral marks on gloss.",
+        },
+        {
+          title: "Monthly",
+          body: "Clean the drawer runners with a dry brush. Grit is the only thing that stops a soft-close mechanism behaving properly.",
+        },
+        {
+          title: "Never",
+          body: "Bleach, acetone, scouring cream, steam cleaners, or hanging wet towels over an open drawer front.",
+        },
+      ],
+    },
+    faqs: {
+      title: "FAQs",
+      intro: "The questions our team answers most often.",
+      items: [
+        {
+          q: "How long does an order take?",
+          a: "Three to four weeks from confirmed measurements. Every unit is cut to order — nothing sits in a warehouse.",
+        },
+        {
+          q: "Do you measure on site?",
+          a: "Yes, in Cairo and Giza at no charge. Elsewhere in Egypt we send the template and confirm dimensions by video call.",
+        },
+        {
+          q: "Can I change a finish after ordering?",
+          a: "Until the panels are cut, which is usually five days after confirmation. After that, a change means a new production slot.",
+        },
+        {
+          q: "Is the unit really waterproof?",
+          a: "The core is marine-grade plywood and every edge is laser-sealed, so standing water cannot reach the substrate. It is built for a bathroom, not a swimming pool.",
+        },
+        {
+          q: "Do you install outside Cairo?",
+          a: "We deliver nationwide. Installation teams cover Cairo, Giza and Alexandria; elsewhere we brief your fitter and stay on the phone through the hang.",
+        },
+        {
+          q: "What about the basin and tap?",
+          a: "Integrated basins are included. Vessel basins and taps are specified with you in the Lab and quoted separately.",
+        },
+      ],
+    },
+  },
+
+  contact: {
+    title: "Talk to us",
+    subtitle: "Custom projects, trade accounts, or a question about a unit.",
+    subject: "Subject",
+    message: "Message",
+    send: "Send message",
+    sending: "Sending…",
+    success: "Message received. We reply within one business day.",
+    studio: "Studio",
+    hours: "Sunday–Thursday, 10:00–18:00",
+  },
+
+  footer: {
+    blurb: "Made in Egypt with engineering precision. Where luxury meets functionality.",
+    collections: "Collections",
+    support: "Support",
+    contact: "Contact",
+    collectionLinks: {
+      vanities: "Bathroom Vanities",
+      storage: "Storage Systems",
+      kitchen: "Kitchen Collection",
+      custom: "Custom Projects",
+    },
+    supportLinks: {
+      installation: "Installation Guide",
+      warranty: "Warranty Information",
+      care: "Care Instructions",
+      faqs: "FAQs",
+    },
+    address: "Cairo, Egypt",
+    phone: "+20 1011911502",
+    email: "info@glara-eg.com",
+    rights: "© {year} GLARA. All rights reserved.",
+    madeIn: "Made in Egypt with engineering precision",
+    newsletter: "Newsletter",
+    newsletterBody: "New collections and workshop notes. Rarely, never spam.",
+    newsletterPlaceholder: "Email address",
+    newsletterCta: "Join",
+    newsletterSuccess: "You're subscribed.",
+  },
+
+  admin: {
+    title: "Admin",
+    dashboard: "Dashboard",
+    products: "Products",
+    orders: "Orders",
+    inquiries: "Inquiries",
+    subscribers: "Subscribers",
+    revenue: "Revenue",
+    ordersCount: "Orders",
+    productsCount: "Products",
+    pendingOrders: "Pending",
+    recentOrders: "Recent orders",
+    customer: "Customer",
+    status: "Status",
+    date: "Date",
+    amount: "Amount",
+    updateStatus: "Update status",
+    noAccess: "Admin access required.",
+    newProduct: "New product",
+    activeToggle: "Active",
+    featuredToggle: "Featured",
+    saved: "Saved",
+  },
+
+  errors: {
+    required: "This field is required.",
+    invalidEmail: "Enter a valid email address.",
+    shortPassword: "Password must be at least 8 characters.",
+    invalidCredentials: "Email or password is incorrect.",
+    emailTaken: "An account with that email already exists.",
+    notFound: "Not found.",
+    unauthorized: "Please sign in to continue.",
+    generic: "Something went wrong.",
+    outOfStock: "That combination is unavailable.",
+  },
+
+  notFound: {
+    title: "Page not found",
+    body: "The page you're after has moved or never existed.",
+    cta: "Back home",
+  },
+} as const;
+
+/**
+ * Widens the `as const` literals back to plain strings/arrays so translation
+ * files only have to match the *shape*, not the English wording.
+ */
+type Loosen<T> = T extends string
+  ? string
+  : T extends readonly (infer U)[]
+    ? readonly Loosen<U>[]
+    : { -readonly [K in keyof T]: Loosen<T[K]> };
+
+export type Dictionary = Loosen<typeof en>;
+
+export default en as Dictionary;
