@@ -5,6 +5,7 @@ import { getSessionUser } from "@/lib/auth";
 import { clearCart, readCart } from "@/lib/cart";
 import { orderTotals } from "@/lib/money";
 import { orderNumber } from "@/lib/utils";
+import { tooManyRequests } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,9 @@ const schema = z.object({
 });
 
 export async function POST(request: Request) {
+  const limited = tooManyRequests(request, "orders", 10, 60 * 60_000);
+  if (limited) return limited;
+
   const parsed = schema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "invalid" }, { status: 400 });
 

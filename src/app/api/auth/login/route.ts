@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { createSession, verifyPassword } from "@/lib/auth";
+import { tooManyRequests } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,10 @@ const schema = z.object({
 });
 
 export async function POST(request: Request) {
+  // Ten attempts per quarter hour — generous for a typo, useless for a word list.
+  const limited = tooManyRequests(request, "login", 10, 15 * 60_000);
+  if (limited) return limited;
+
   const parsed = schema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "invalidCredentials" }, { status: 400 });
 

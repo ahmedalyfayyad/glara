@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { cartViewById, getOrCreateCart, readCart } from "@/lib/cart";
+import { tooManyRequests } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +26,10 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  // Adding to a cart creates a Cart row for anonymous visitors — worth a ceiling.
+  const limited = tooManyRequests(request, "cart-add", 60, 10 * 60_000);
+  if (limited) return limited;
+
   const parsed = addSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) {
     return NextResponse.json({ error: "invalid_payload" }, { status: 400 });

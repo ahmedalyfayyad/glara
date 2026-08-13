@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { tooManyRequests } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +11,9 @@ const schema = z.object({
 });
 
 export async function POST(request: Request) {
+  const limited = tooManyRequests(request, "newsletter", 5, 10 * 60_000);
+  if (limited) return limited;
+
   const parsed = schema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "invalidEmail" }, { status: 400 });
 

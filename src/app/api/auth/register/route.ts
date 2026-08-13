@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { createSession, hashPassword } from "@/lib/auth";
+import { tooManyRequests } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +15,9 @@ const schema = z.object({
 });
 
 export async function POST(request: Request) {
+  const limited = tooManyRequests(request, "register", 5, 60 * 60_000);
+  if (limited) return limited;
+
   const parsed = schema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) {
     const field = parsed.error.issues[0]?.path[0];
