@@ -5,6 +5,7 @@ import { TrustBadges } from "@/components/home/TrustBadges";
 import { SilentLuxury } from "@/components/home/SilentLuxury";
 import { Engineering } from "@/components/home/Engineering";
 import { featuredProducts, listProducts } from "@/lib/queries";
+import { siteUrl } from "@/lib/site";
 import { getDictionary, toLocale } from "@/i18n";
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
@@ -23,7 +24,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     "@type": "Organization",
     name: "GLARA",
     description: t.meta.description,
-    url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+    url: siteUrl(),
     address: { "@type": "PostalAddress", addressLocality: "Cairo", addressCountry: "EG" },
     telephone: "+201011911502",
     email: "info@glara-eg.com",

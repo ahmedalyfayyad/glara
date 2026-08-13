@@ -1,3 +1,4 @@
+import { randomBytes } from "node:crypto";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
@@ -521,24 +522,44 @@ async function main() {
   }
 
   console.log("→ seeding accounts");
+
+  /*
+   * The repository is public, so no working password may live in it. The admin
+   * password comes from the environment; without one the seed mints a random
+   * password and prints it once. Either way nothing predictable ships.
+   */
+  const adminEmail = process.env.SEED_ADMIN_EMAIL?.trim() || "admin@glara-eg.com";
+  const adminPassword =
+    process.env.SEED_ADMIN_PASSWORD?.trim() || randomBytes(12).toString("base64url");
+  const generated = !process.env.SEED_ADMIN_PASSWORD?.trim();
+
   await prisma.user.create({
     data: {
-      email: "admin@glara-eg.com",
+      email: adminEmail,
       name: "GLARA Studio",
       phone: "+20 1011911502",
       role: "ADMIN",
-      passwordHash: await bcrypt.hash("Glara@2026", 10),
+      passwordHash: await bcrypt.hash(adminPassword, 10),
     },
   });
-  await prisma.user.create({
-    data: {
-      email: "customer@example.com",
-      name: "Nour Hassan",
-      phone: "+20 1000000000",
-      role: "USER",
-      passwordHash: await bcrypt.hash("Customer@2026", 10),
-    },
-  });
+
+  console.log(`  admin: ${adminEmail}`);
+  if (generated) {
+    console.log(`  generated password (shown once): ${adminPassword}`);
+  }
+
+  // A demo shopper, only outside production.
+  if (process.env.NODE_ENV !== "production" && !process.env.SEED_SKIP_DEMO_USER) {
+    await prisma.user.create({
+      data: {
+        email: "customer@example.com",
+        name: "Nour Hassan",
+        phone: "+20 1000000000",
+        role: "USER",
+        passwordHash: await bcrypt.hash(randomBytes(9).toString("base64url"), 10),
+      },
+    });
+  }
 
   const counts = {
     products: await prisma.product.count(),

@@ -21,10 +21,17 @@ The app runs at http://localhost:3000 and redirects to `/en` or `/ar` based on t
 
 ### Seeded accounts
 
-| Role     | Email                  | Password         |
-| -------- | ---------------------- | ---------------- |
-| Admin    | `admin@glara-eg.com`   | `Glara@2026`     |
-| Customer | `customer@example.com` | `Customer@2026`  |
+This repository is public, so it ships no working password. The seed reads the
+admin credentials from the environment:
+
+```
+SEED_ADMIN_EMAIL="you@example.com"     # optional, defaults to admin@glara-eg.com
+SEED_ADMIN_PASSWORD="…"                # optional
+```
+
+Without `SEED_ADMIN_PASSWORD` the seed mints a random one and prints it once —
+copy it from the seed output. A demo shopper account is created only when
+`NODE_ENV` is not `production`.
 
 ### Environment
 

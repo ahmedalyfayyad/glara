@@ -11,6 +11,7 @@ import { getDictionary } from "@/i18n";
 import { isLocale, locales, localeDirection, type Locale } from "@/i18n/config";
 import { getSessionUser } from "@/lib/auth";
 import { readCart } from "@/lib/cart";
+import { siteUrl } from "@/lib/site";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -51,7 +52,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = getDictionary(locale);
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const base = siteUrl();
 
   return {
     metadataBase: new URL(base),
