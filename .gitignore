@@ -12,11 +12,11 @@ next-env.d.ts
 prisma/dev.db
 prisma/dev.db-journal
 assets-raw
-
 # Local working notes — never part of the published repo
 HANDOFF.md
-
 .vercel
 .env*
 
-.env*
+# Agent tooling installed by integrations, not part of the product
+.claude/skills/
+skills-lock.json

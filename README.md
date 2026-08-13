@@ -1,5 +1,7 @@
 # GLARA
 
+**Live: https://glara-dulaxa.vercel.app**
+
 Floating bathroom vanity systems — a full storefront built from the Figma source of truth.
 Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Prisma + PostgreSQL.
 
@@ -46,6 +48,28 @@ NEXT_PUBLIC_SITE_URL="…"       # canonical URLs, sitemap, Open Graph
 
 Serverless functions open a connection per invocation, so `DATABASE_URL` points
 at a connection pooler. Prisma Migrate needs a real session and uses `DIRECT_URL`.
+
+---
+
+## Deployment
+
+Vercel, from `main` on GitHub — every push builds and, if green, goes live.
+The build runs `prisma migrate deploy` before `next build`, so the schema and
+the code ship together.
+
+The database is Neon Postgres, provisioned through the Vercel Marketplace, which
+injects `DATABASE_URL` and `DATABASE_URL_UNPOOLED` into the project. `DIRECT_URL`
+is set by hand from the unpooled value.
+
+**Regions.** Neon sits in `us-east-1`, so `vercel.json` pins the functions to
+`iad1` beside it. A page render makes several queries; paying an Atlantic
+crossing on each one costs far more than the single trip from the reader to the
+edge, and static assets come off the CDN POP nearest them either way. If the
+database ever moves to Europe, move the function region with it.
+
+**Cold starts.** Neon scales its compute to zero when idle. `src/lib/prisma.ts`
+appends `connect_timeout` to the connection string so the first request after a
+quiet spell waits for the wake-up instead of failing.
 
 ---
 
