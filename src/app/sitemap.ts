@@ -17,10 +17,20 @@ const STATIC_PATHS = [
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteUrl();
 
-  const products = await prisma.product.findMany({
-    where: { active: true },
-    select: { slug: true, updatedAt: true },
-  });
+  /*
+   * The sitemap is generated at build time. A database that is unreachable then
+   * should cost us the product URLs, not the whole deployment — `migrate deploy`
+   * in the build script is what fails loudly when the connection is genuinely bad.
+   */
+  let products: Array<{ slug: string; updatedAt: Date }> = [];
+  try {
+    products = await prisma.product.findMany({
+      where: { active: true },
+      select: { slug: true, updatedAt: true },
+    });
+  } catch (error) {
+    console.warn("sitemap: catalogue unavailable, emitting static routes only", error);
+  }
 
   const pages = locales.flatMap((locale) =>
     STATIC_PATHS.map((path) => ({
