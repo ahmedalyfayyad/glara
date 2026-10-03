@@ -1,6 +1,7 @@
 import { randomBytes } from "node:crypto";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import materials from "./materials.json";
 
 const prisma = new PrismaClient();
 
@@ -449,6 +450,34 @@ const products: ProductSeed[] = [
   },
 ];
 
+/**
+ * The shade card is reference data, not catalogue data: it is upserted rather
+ * than wiped, so a re-seed never orphans a saved configuration that points at a
+ * décor. `prisma/materials.json` is generated from the Greenlam PDF in
+ * `data/` — see README.
+ */
+async function seedMaterials() {
+  console.log("→ seeding material library");
+  for (const m of materials) {
+    await prisma.material.upsert({
+      where: { code: m.code },
+      update: {
+        decorNo: m.decorNo,
+        decorCode: m.decorCode,
+        name: m.name,
+        category: m.category,
+        family: m.family,
+        hex: m.hex,
+        texture: m.texture,
+        priceTier: m.priceTier,
+        sortOrder: m.sortOrder,
+        active: true,
+      },
+      create: { ...m, active: true },
+    });
+  }
+}
+
 async function main() {
   console.log("→ clearing existing catalogue");
   await prisma.orderItem.deleteMany();
@@ -464,6 +493,8 @@ async function main() {
   await prisma.inquiry.deleteMany();
   await prisma.subscriber.deleteMany();
   await prisma.user.deleteMany();
+
+  await seedMaterials();
 
   console.log("→ seeding products");
   for (const p of products) {
@@ -567,6 +598,7 @@ async function main() {
     sizes: await prisma.productSize.count(),
     images: await prisma.productImage.count(),
     users: await prisma.user.count(),
+    materials: await prisma.material.count(),
   };
   console.log("✓ seeded", counts);
 }

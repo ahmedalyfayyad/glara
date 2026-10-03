@@ -87,27 +87,49 @@ export type ProductFilters = {
   sort?: "featured" | "priceAsc" | "priceDesc" | "newest";
 };
 
+/**
+ * PostgreSQL `contains` is case-sensitive unless told otherwise, so "linea" used
+ * to miss "Linea" entirely. Each word in the query has to match somewhere — name,
+ * collection, tagline, copy, or one of the finishes the unit is offered in — so
+ * "oak tower" narrows instead of widening the way a single OR would.
+ */
+const like = (value: string) => ({ contains: value, mode: "insensitive" as const });
+
+function matchesToken(token: string) {
+  return {
+    OR: [
+      { name: like(token) },
+      { nameAr: like(token) },
+      { collection: like(token) },
+      { collectionAr: like(token) },
+      { tagline: like(token) },
+      { taglineAr: like(token) },
+      { description: like(token) },
+      { descriptionAr: like(token) },
+      { type: like(token) },
+      { finishes: { some: { OR: [{ label: like(token) }, { labelAr: like(token) }, { key: like(token) }] } } },
+    ],
+  };
+}
+
+export function searchTokens(q: string | undefined): string[] {
+  return (q ?? "")
+    .split(/\s+/)
+    .map((part) => part.trim())
+    .filter((part) => part.length > 1)
+    .slice(0, 6);
+}
+
 export async function listProducts(filters: ProductFilters = {}): Promise<ProductListItem[]> {
   const { type, finish, q, sort = "featured" } = filters;
+  const tokens = searchTokens(q);
 
   const rows = await prisma.product.findMany({
     where: {
       active: true,
       ...(type && type !== "all" ? { type } : {}),
       ...(finish && finish !== "all" ? { finishes: { some: { key: finish } } } : {}),
-      ...(q
-        ? {
-            OR: [
-              { name: { contains: q } },
-              { nameAr: { contains: q } },
-              { collection: { contains: q } },
-              { collectionAr: { contains: q } },
-              { tagline: { contains: q } },
-              { taglineAr: { contains: q } },
-              { description: { contains: q } },
-            ],
-          }
-        : {}),
+      ...(tokens.length ? { AND: tokens.map(matchesToken) } : {}),
     },
     select: listSelect,
     orderBy:

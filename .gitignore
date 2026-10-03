@@ -20,3 +20,8 @@ HANDOFF.md
 # Agent tooling installed by integrations, not part of the product
 .claude/skills/
 skills-lock.json
+
+# Supplier source material — the shade card PDF stays local; prisma/materials.json
+# and public/finishes/ are what the site ships.
+data/
+

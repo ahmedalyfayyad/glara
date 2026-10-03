@@ -148,6 +148,38 @@ easing lifted from Figma; components use those tokens rather than raw hex.
 
 ---
 
+## The material library
+
+`public/finishes/` and `prisma/materials.json` are generated from the Greenlam
+HPL shade card (2024-26 Egypt edition). The PDF itself is not in the repo — drop
+it in `data/` and re-run the extractor if the range changes.
+
+The extractor renders each shade-card page at 300 DPI, finds the décor labels,
+infers the swatch grid from where those labels sit, and crops the panel above
+each one. 172 décors come out across six categories — woods, colours, stones,
+fabrics, ultra-matt AFX and patterns — each saved as a 512px square plus its
+average colour, which is what the 3D viewer tints untextured edges with.
+
+Décor names are proper nouns on a printed card, so they are not translated; the
+category and finish family are. `SUD`, `GLS` and `MAT` are readable from the card
+itself, which prints the same décor in all three side by side, and `AFX` is
+documented on its own page. Every other suffix is shown as the raw décor code
+rather than a guessed name.
+
+A décor replaces the finish surcharge rather than stacking on it — one surface,
+one price — and `/api/configurations` applies that same rule server-side.
+
+## The 3D viewer
+
+`src/components/lab/VanityScene.tsx` builds the unit from primitives rather than
+loading a model: the carcass, drawer fronts, countertop, basin and tap are all
+generated from the configuration, so width, décor, hardware and basin change the
+geometry live. The décor texture repeats at a fixed world scale, so the grain
+stays the same size whether the unit is 80cm or 140cm. Lighting is a three-point
+rig rather than an HDR, so nothing is fetched at runtime.
+
+---
+
 ## Design source
 
 Figma file `4zvBROXpeCwwRjnTUMGNg3` — home `15:2014`, catalogue `22:3484`,

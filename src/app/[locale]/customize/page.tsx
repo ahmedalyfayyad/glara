@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageTitle } from "@/components/site/PageTitle";
 import { CustomizeLab, type LabProduct } from "@/components/lab/CustomizeLab";
 import { labProducts, localised } from "@/lib/queries";
+import { listMaterials } from "@/lib/materials";
 import { getDictionary, type Locale, toLocale } from "@/i18n";
 
 export async function generateMetadata({
@@ -29,7 +30,7 @@ export default async function CustomizePage({
   const [{ locale: localeParam }, search] = await Promise.all([params, searchParams]);
   const locale = toLocale(localeParam);
   const t = getDictionary(locale);
-  const rows = await labProducts();
+  const [rows, materials] = await Promise.all([labProducts(), listMaterials()]);
 
   const products: LabProduct[] = rows.map((row) => ({
     id: row.id,
@@ -54,7 +55,7 @@ export default async function CustomizePage({
       </PageTitle>
 
       <div className="shell pb-24 pt-12 md:pt-16">
-        <CustomizeLab products={products} initialSlug={search.product} />
+        <CustomizeLab products={products} materials={materials} initialSlug={search.product} />
       </div>
     </>
   );

@@ -181,12 +181,43 @@ model Configuration {
   userId    String?
   user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
   finishKey String
+  // The décor chosen in the lab, when the shopper went past the product's own
+  // shortlist into the full shade card.
+  materialCode String?
+  material     Material? @relation(fields: [materialCode], references: [code], onDelete: SetNull)
   sizeLabel String
   hardware  String // brushed | black | gold
   basin     String // integrated | vessel | double
   notes     String?
   price     Int
   createdAt DateTime @default(now())
+}
+
+// ---------------------------------------------------------------------------
+// Material library
+// ---------------------------------------------------------------------------
+
+/// One décor from the Greenlam HPL shade card. `code` is "<décor no>-<décor code>"
+/// — 6546 SUD becomes "6546-sud" — which is what a configuration stores and what
+/// the texture file is named after.
+model Material {
+  id        String  @id @default(cuid())
+  code      String  @unique
+  decorNo   String
+  decorCode String
+  name      String
+  category  String // wood | solid | stone | fabric | afx | pattern
+  family    String // textured | suede | gloss | matt | ultramatt
+  hex       String // average colour, for swatch fallbacks and 3D tinting
+  texture   String // /finishes/<code>.jpg
+  priceTier Int     @default(0)
+  sortOrder Int     @default(0)
+  active    Boolean @default(true)
+
+  configs Configuration[]
+
+  @@index([category])
+  @@index([active, sortOrder])
 }
 
 // ---------------------------------------------------------------------------

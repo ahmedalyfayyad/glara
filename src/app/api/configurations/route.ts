@@ -4,12 +4,14 @@ import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/auth";
 import { configCode } from "@/lib/utils";
 import { configurationPrice } from "@/lib/pricing";
+import { getMaterial, materialDelta } from "@/lib/materials";
 
 export const dynamic = "force-dynamic";
 
 const schema = z.object({
   productId: z.string().min(1),
   finishKey: z.string().min(1),
+  materialCode: z.string().min(1).nullish(),
   sizeLabel: z.string().min(1),
   hardware: z.enum(["brushed", "black", "gold"]),
   basin: z.enum(["integrated", "vessel", "double"]),
@@ -20,7 +22,7 @@ export async function POST(request: Request) {
   const parsed = schema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "invalid" }, { status: 400 });
 
-  const { productId, finishKey, sizeLabel, hardware, basin, notes } = parsed.data;
+  const { productId, finishKey, materialCode, sizeLabel, hardware, basin, notes } = parsed.data;
 
   const product = await prisma.product.findFirst({
     where: { id: productId, active: true },
@@ -34,10 +36,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid_combination" }, { status: 400 });
   }
 
+  // An unknown décor code is a stale client, not a cheaper unit — refuse it
+  // rather than quietly falling back to the finish price.
+  const material = materialCode ? await getMaterial(materialCode) : null;
+  if (materialCode && !material) {
+    return NextResponse.json({ error: "invalid_material" }, { status: 400 });
+  }
+
   const user = await getSessionUser();
+  // One surface, one surcharge: the décor replaces the finish delta.
   const price = configurationPrice(
     product.basePrice,
-    finish.priceDelta,
+    material ? materialDelta(material.priceTier) : finish.priceDelta,
     size.priceDelta,
     hardware,
     basin,
@@ -49,6 +59,7 @@ export async function POST(request: Request) {
       productId: product.id,
       userId: user?.id ?? null,
       finishKey,
+      materialCode: material?.code ?? null,
       sizeLabel,
       hardware,
       basin,

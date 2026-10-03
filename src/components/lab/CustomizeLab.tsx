@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import { useCart } from "@/components/providers/CartProvider";
 import { useI18n } from "@/components/providers/I18nProvider";
@@ -11,6 +12,16 @@ import { configurationPrice } from "@/lib/pricing";
 import { formatPrice } from "@/lib/money";
 import { cx } from "@/lib/utils";
 import { fill } from "@/i18n";
+import { MaterialPicker } from "@/components/lab/MaterialPicker";
+import type { MaterialOption } from "@/lib/materials";
+import type { VanityConfig } from "@/components/lab/VanityScene";
+
+// three.js has no business in the server bundle, and the canvas has nothing to
+// render until it is in front of someone.
+const VanityScene = dynamic(
+  () => import("@/components/lab/VanityScene").then((m) => m.VanityScene),
+  { ssr: false },
+);
 
 export type LabProduct = {
   id: string;
@@ -29,9 +40,11 @@ const STEPS = ["unit", "finish", "size", "details"] as const;
 
 export function CustomizeLab({
   products,
+  materials,
   initialSlug,
 }: {
   products: LabProduct[];
+  materials: MaterialOption[];
   initialSlug?: string;
 }) {
   const { locale, t } = useI18n();
@@ -45,6 +58,9 @@ export function CustomizeLab({
   const [step, setStep] = useState(0);
   const [productId, setProductId] = useState(products[startIndex]?.id ?? products[0]?.id ?? "");
   const [finishKey, setFinishKey] = useState("");
+  const [materialCode, setMaterialCode] = useState<string | null>(null);
+  const [view, setView] = useState<"3d" | "photo">("3d");
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [sizeLabel, setSizeLabel] = useState("");
   const [hardware, setHardware] = useState<Hardware>("brushed");
   const [basin, setBasin] = useState<Basin>("integrated");
@@ -69,10 +85,15 @@ export function CustomizeLab({
 
   const finish = product.finishes.find((row) => row.key === finishKey) ?? product.finishes[0];
   const size = product.sizes.find((row) => row.label === sizeLabel) ?? product.sizes[0];
+  const material = materials.find((row) => row.code === materialCode) ?? null;
 
+  /*
+   * A decor from the shade card replaces the finish surcharge rather than
+   * stacking on it — one surface, one price. The server applies the same rule.
+   */
   const price = configurationPrice(
     product.basePrice,
-    finish?.priceDelta ?? 0,
+    material ? material.priceDelta : finish?.priceDelta ?? 0,
     size?.priceDelta ?? 0,
     hardware,
     basin,
@@ -80,11 +101,27 @@ export function CustomizeLab({
 
   const preview = finish?.imageUrl || product.image;
 
+  // Falls back to the first decor so the canvas always has a real laminate on it.
+  const sceneMaterial = material ?? materials[0];
+  const scene: VanityConfig | null = sceneMaterial
+    ? {
+        widthCm: Number.parseInt(size?.label ?? "100", 10) || 100,
+        texture: sceneMaterial.texture,
+        hex: material ? "#ffffff" : finish?.swatch ?? "#ffffff",
+        family: sceneMaterial.family,
+        hardware,
+        basin,
+        open: drawerOpen,
+      }
+    : null;
+
   function reset() {
     setStep(0);
     setProductId(products[0].id);
     setHardware("brushed");
     setBasin("integrated");
+    setMaterialCode(null);
+    setDrawerOpen(false);
     setNotes("");
     setSavedCode(null);
   }
@@ -97,6 +134,7 @@ export function CustomizeLab({
       body: JSON.stringify({
         productId: product.id,
         finishKey: finish?.key,
+        materialCode,
         sizeLabel: size?.label,
         hardware,
         basin,
@@ -138,7 +176,9 @@ export function CustomizeLab({
 
   const summary = [
     { label: t.lab.steps.unit, value: product.name },
-    { label: t.product.finish, value: finish?.label ?? "—" },
+    material
+      ? { label: t.lab.material, value: `${material.name} · ${material.decorNo} ${material.decorCode}` }
+      : { label: t.product.finish, value: finish?.label ?? "—" },
     { label: t.product.size, value: size?.label ?? "—" },
     { label: t.lab.hardware, value: t.lab.hardwareOptions[hardware] },
     { label: t.lab.basin, value: t.lab.basinOptions[basin] },
@@ -227,17 +267,23 @@ export function CustomizeLab({
           )}
 
           {step === 1 && (
-            <section aria-labelledby="lab-finish">
+            <section aria-labelledby="lab-finish" className="space-y-10">
               <h2 id="lab-finish" className="text-xl font-light md:text-2xl">
                 {t.lab.selectFinish}
               </h2>
-              <div className="mt-6 flex flex-wrap gap-6">
+
+              <div>
+                <h3 className="label-caps text-ink-70">{t.lab.studioPicks}</h3>
+              <div className="mt-5 flex flex-wrap gap-6">
                 {product.finishes.map((row) => (
                   <button
                     key={row.key}
                     type="button"
-                    onClick={() => setFinishKey(row.key)}
-                    aria-pressed={row.key === finish?.key}
+                    onClick={() => {
+                      setFinishKey(row.key);
+                      setMaterialCode(null);
+                    }}
+                    aria-pressed={!material && row.key === finish?.key}
                     className="flex flex-col items-center gap-3"
                   >
                     <span
@@ -255,6 +301,23 @@ export function CustomizeLab({
                     )}
                   </button>
                 ))}
+              </div>
+              </div>
+
+              <div className="border-t border-line pt-9">
+                <h3 className="label-caps text-ink-70">{t.lab.shadeCard}</h3>
+                <p className="mt-2 max-w-[62ch] text-sm leading-relaxed text-ink-40">
+                  {t.lab.shadeCardNote}
+                </p>
+                <div className="mt-6">
+                  <MaterialPicker
+                    materials={materials}
+                    selected={materialCode}
+                    onSelect={(picked) =>
+                      setMaterialCode((current) => (current === picked.code ? null : picked.code))
+                    }
+                  />
+                </div>
               </div>
             </section>
           )}
@@ -362,16 +425,57 @@ export function CustomizeLab({
       {/* Live preview */}
       <aside className="lg:sticky lg:top-28 lg:h-fit">
         <div className="border border-line">
-          <div className="relative aspect-4/3">
-            <Image
-              key={preview}
-              src={preview}
-              alt={product.name}
-              fill
-              sizes="(min-width: 1024px) 400px, 100vw"
-              className="object-contain"
-              style={{ animation: "glara-fade 0.5s var(--ease-luxe) both" }}
-            />
+          <div className="relative aspect-4/3 overflow-hidden">
+            {view === "3d" && scene ? (
+              <VanityScene config={scene} />
+            ) : (
+              <Image
+                key={preview}
+                src={preview}
+                alt={product.name}
+                fill
+                sizes="(min-width: 1024px) 400px, 100vw"
+                className="object-contain"
+                style={{ animation: "glara-fade 0.5s var(--ease-luxe) both" }}
+              />
+            )}
+
+            {/* 3D / photo toggle */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-3">
+              <div className="pointer-events-auto flex overflow-hidden rounded-full border border-line bg-white/85 backdrop-blur">
+                {(["3d", "photo"] as const).map((mode) => (
+                  <button
+                    key={mode}
+                    type="button"
+                    onClick={() => setView(mode)}
+                    aria-pressed={view === mode}
+                    disabled={mode === "3d" && !scene}
+                    className={cx(
+                      "px-3 py-1.5 text-[11px] uppercase tracking-[0.12em] transition-colors duration-300 disabled:opacity-40",
+                      view === mode ? "bg-gold text-white" : "text-ink-60 hover:text-ink",
+                    )}
+                  >
+                    {mode === "3d" ? t.lab.view3d : t.lab.viewPhoto}
+                  </button>
+                ))}
+              </div>
+
+              {view === "3d" && scene && (
+                <button
+                  type="button"
+                  onClick={() => setDrawerOpen((open) => !open)}
+                  className="pointer-events-auto rounded-full border border-line bg-white/85 px-3 py-1.5 text-[11px] uppercase tracking-[0.12em] text-ink-60 backdrop-blur transition-colors hover:text-gold"
+                >
+                  {drawerOpen ? t.lab.closeDrawer : t.lab.openDrawer}
+                </button>
+              )}
+            </div>
+
+            {view === "3d" && scene && (
+              <p className="pointer-events-none absolute inset-x-0 bottom-2 text-center text-[11px] uppercase tracking-[0.18em] text-ink-40">
+                {t.lab.dragToRotate}
+              </p>
+            )}
           </div>
 
           <div className="p-6">
