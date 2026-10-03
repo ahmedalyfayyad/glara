@@ -181,15 +181,6 @@
     flex: 0 0 auto;
   }
 
-  /*
-   * Carousel item. The scale and opacity are written straight onto the element
-   * every frame by the carousel — a CSS transition here would lag the scroll,
-   * and these values are already interpolated per frame.
-   */
-  .rail-item {
-    transform-origin: center;
-    will-change: transform, opacity;
-  }
 }
 
 @layer utilities {

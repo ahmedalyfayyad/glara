@@ -13,8 +13,10 @@ export function Hero({ products, locale }: { products: ProductListItem[]; locale
     slug: product.slug,
     name: locale === "ar" ? product.nameAr : product.name,
     tagline: locale === "ar" ? product.taglineAr : product.tagline,
+    collection: locale === "ar" ? product.collectionAr : product.collection,
     image: product.image,
     price: product.basePrice,
+    swatches: product.swatches.map((finish) => ({ key: finish.key, swatch: finish.swatch })),
   }));
 
   return (

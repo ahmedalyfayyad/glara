@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useI18n } from "@/components/providers/I18nProvider";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
 import { formatPrice } from "@/lib/money";
@@ -11,217 +11,224 @@ export type HeroItem = {
   slug: string;
   name: string;
   tagline: string;
+  collection: string;
   image: string;
   price: number;
+  swatches: Array<{ key: string; swatch: string }>;
 };
 
-/** Pixels per second the rail drifts on its own. */
-const DRIFT = 34;
+/** Radians per second. One full orbit takes about eighteen seconds. */
+const SPEED = (Math.PI * 2) / 18;
+/** How far a drag has to travel to spin the ring once, in pixels. */
+const DRAG_PER_TURN = 900;
+
+type Placed = { index: number; depth: number };
 
 export function HeroCarousel({ items }: { items: HeroItem[] }) {
   const { locale, t } = useI18n();
-  const railRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+  const angleRef = useRef(0);
   const pausedRef = useRef(false);
+  const [front, setFront] = useState(0);
 
-  // Three copies so the rail can wrap without the seam ever being on screen.
-  const loop = [...items, ...items, ...items];
+  /**
+   * Lays the units out on an ellipse seen from slightly above: the one nearest
+   * the camera is biggest, brightest and on top, the far side shrinks back and
+   * blurs out. Everything is written straight onto the nodes each frame — going
+   * through React state here would drop frames on a phone.
+   */
+  const place = useCallback(() => {
+    const stage = stageRef.current;
+    if (!stage || items.length === 0) return;
 
-  /** Scales each card by how close its centre is to the centre of the rail. */
-  const paint = useCallback(() => {
-    const rail = railRef.current;
-    if (!rail) return;
-    const box = rail.getBoundingClientRect();
-    if (box.width === 0) return;
+    const { width } = stage.getBoundingClientRect();
+    if (width === 0) return;
 
-    const centre = box.left + box.width / 2;
-    const reach = box.width / 2;
+    const radiusX = width * 0.3;
+    const radiusY = width * 0.035;
+    const step = (Math.PI * 2) / items.length;
+    const placed: Placed[] = [];
 
-    for (const child of Array.from(rail.children) as HTMLElement[]) {
-      const rect = child.getBoundingClientRect();
-      // Undo the current scale so the measurement is of the card's layout width.
-      const scaled = rect.width || 1;
-      const distance = Math.abs(rect.left + scaled / 2 - centre) / reach;
-      const raw = Math.max(0, 1 - distance * 1.35);
-      // Smoothstep, so the centre card blooms instead of ramping linearly.
-      const focus = raw * raw * (3 - 2 * raw);
+    for (let i = 0; i < items.length; i++) {
+      const node = cardRefs.current[i];
+      if (!node) continue;
 
-      child.style.transform = `scale(${(0.66 + 0.44 * focus).toFixed(4)})`;
-      child.style.opacity = (0.4 + 0.6 * focus).toFixed(3);
+      const a = angleRef.current + i * step;
+      const x = Math.sin(a) * radiusX;
+      // cos(a) is 1 at the front of the orbit and -1 at the back.
+      const depth = (Math.cos(a) + 1) / 2;
+      const y = -Math.cos(a) * radiusY;
 
-      const caption = child.querySelector<HTMLElement>("[data-caption]");
-      if (caption) caption.style.opacity = Math.max(0, (focus - 0.55) * 2.2).toFixed(3);
+      const scale = 0.46 + depth * 0.74;
+      node.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) scale(${scale.toFixed(3)})`;
+      node.style.opacity = (0.2 + depth * 0.8).toFixed(3);
+      node.style.filter = depth > 0.82 ? "none" : `blur(${((1 - depth) * 3.4).toFixed(2)}px)`;
+      node.style.zIndex = String(Math.round(depth * 100));
+      node.style.pointerEvents = depth > 0.6 ? "auto" : "none";
+
+      placed.push({ index: i, depth });
     }
-  }, []);
+
+    const nearest = placed.reduce((best, cur) => (cur.depth > best.depth ? cur : best), placed[0]);
+    if (nearest) setFront((current) => (current === nearest.index ? current : nearest.index));
+  }, [items.length]);
 
   useEffect(() => {
-    const rail = railRef.current;
-    if (!rail) return;
+    const stage = stageRef.current;
+    if (!stage) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    /*
-     * One copy of the list, measured from layout offsets so the transform on
-     * each card cannot skew it. scrollWidth/3 would be a gap short and the
-     * wrap would visibly jump.
-     */
-    const measure = () => {
-      const cards = rail.children as HTMLCollectionOf<HTMLElement>;
-      const start = cards[0]?.offsetLeft ?? 0;
-      const next = cards[items.length]?.offsetLeft ?? rail.scrollWidth / 3;
-      return next - start;
-    };
-
-    let period = measure();
-
-    /*
-     * scrollLeft is snapped to whole pixels on write, so a 30px/s drift would
-     * be rounded away every frame. The float position lives here instead, and
-     * resyncs whenever the reader scrolls the rail themselves.
-     */
-    let position = period;
-    let applied = -1;
-    rail.scrollLeft = position;
-    paint();
-
     let frame = 0;
     let last = performance.now();
 
     const tick = (now: number) => {
       const delta = Math.min((now - last) / 1000, 0.05);
       last = now;
-
-      if (Math.abs(rail.scrollLeft - applied) > 1.5) position = rail.scrollLeft;
-      // Content travels left → right, so the scroll offset walks backwards.
-      if (!pausedRef.current) position -= DRIFT * delta;
-
-      if (position < period * 0.5) position += period;
-      else if (position > period * 1.5) position -= period;
-
-      rail.scrollLeft = position;
-      applied = rail.scrollLeft;
-
-      paint();
+      if (!pausedRef.current) angleRef.current += SPEED * delta;
+      place();
       frame = requestAnimationFrame(tick);
     };
 
-    // With reduced motion the rail sits still and only repaints when scrolled.
-    const onScroll = () => paint();
-    if (reduced) rail.addEventListener("scroll", onScroll, { passive: true });
-    else frame = requestAnimationFrame(tick);
+    place();
+    if (!reduced) frame = requestAnimationFrame(tick);
 
-    const onResize = () => {
-      period = measure();
-      position = rail.scrollLeft;
-      paint();
-    };
+    const onResize = () => place();
     window.addEventListener("resize", onResize);
 
-    // Drag to throw the rail around.
+    // Drag anywhere on the stage to spin the orbit by hand.
     let dragging = false;
     let startX = 0;
-    let startScroll = 0;
+    let startAngle = 0;
 
     const down = (event: PointerEvent) => {
-      if (event.pointerType === "touch") return; // native touch scrolling is better
       dragging = true;
       pausedRef.current = true;
       startX = event.clientX;
-      startScroll = rail.scrollLeft;
-      rail.setPointerCapture(event.pointerId);
+      startAngle = angleRef.current;
+      stage.setPointerCapture(event.pointerId);
     };
     const move = (event: PointerEvent) => {
       if (!dragging) return;
-      rail.scrollLeft = startScroll - (event.clientX - startX);
+      angleRef.current = startAngle + ((event.clientX - startX) / DRAG_PER_TURN) * Math.PI * 2;
+      place();
     };
-    const up = () => {
+    const up = (event: PointerEvent) => {
+      if (!dragging) return;
       dragging = false;
       pausedRef.current = false;
+      if (stage.hasPointerCapture(event.pointerId)) stage.releasePointerCapture(event.pointerId);
     };
 
-    rail.addEventListener("pointerdown", down);
-    rail.addEventListener("pointermove", move);
-    rail.addEventListener("pointerup", up);
-    rail.addEventListener("pointercancel", up);
-
-    const hold = () => (pausedRef.current = true);
-    const release = () => (pausedRef.current = false);
-    rail.addEventListener("mouseenter", hold);
-    rail.addEventListener("mouseleave", release);
-    rail.addEventListener("touchstart", hold, { passive: true });
-    rail.addEventListener("touchend", release);
+    stage.addEventListener("pointerdown", down);
+    stage.addEventListener("pointermove", move);
+    stage.addEventListener("pointerup", up);
+    stage.addEventListener("pointercancel", up);
 
     return () => {
       cancelAnimationFrame(frame);
-      rail.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
-      rail.removeEventListener("pointerdown", down);
-      rail.removeEventListener("pointermove", move);
-      rail.removeEventListener("pointerup", up);
-      rail.removeEventListener("pointercancel", up);
-      rail.removeEventListener("mouseenter", hold);
-      rail.removeEventListener("mouseleave", release);
-      rail.removeEventListener("touchstart", hold);
-      rail.removeEventListener("touchend", release);
+      stage.removeEventListener("pointerdown", down);
+      stage.removeEventListener("pointermove", move);
+      stage.removeEventListener("pointerup", up);
+      stage.removeEventListener("pointercancel", up);
     };
-  }, [paint, items.length]);
+  }, [place]);
+
+  /** Brings a unit to the front of the orbit by the shortest way round. */
+  const bringForward = useCallback(
+    (index: number) => {
+      const step = (Math.PI * 2) / items.length;
+      const target = -index * step;
+      const turns = Math.round((angleRef.current - target) / (Math.PI * 2));
+      angleRef.current = target + turns * Math.PI * 2;
+      place();
+    },
+    [items.length, place],
+  );
 
   function nudge(direction: -1 | 1) {
-    const rail = railRef.current;
-    if (!rail) return;
-    const step = (rail.firstElementChild as HTMLElement | null)?.offsetWidth ?? 320;
-    rail.scrollBy({ left: step * direction, behavior: "smooth" });
+    bringForward((front + direction + items.length) % items.length);
   }
 
+  const focused = items[front];
+
   return (
-    <div className="relative">
+    <div className="relative select-none">
       <div
-        ref={railRef}
-        dir="ltr"
+        ref={stageRef}
+        /* The far side of the orbit swings past the viewport on a narrow phone;
+           those cards are blurred and faded anyway, so clip rather than shrink
+           the ring and lose the depth. */
+        className="relative mx-auto h-[300px] w-full cursor-grab overflow-hidden touch-pan-y active:cursor-grabbing sm:h-[360px] lg:h-[440px]"
+        onMouseEnter={() => (pausedRef.current = true)}
+        onMouseLeave={() => (pausedRef.current = false)}
         role="region"
         aria-label={t.home.exploreTitle}
-        className="rail cursor-grab items-center gap-6 py-4 active:cursor-grabbing md:gap-10"
-        style={{ scrollSnapType: "none" }}
       >
-        {loop.map((item, index) => {
-          const original = index < items.length;
-          return (
-            <Link
-              key={`${item.slug}-${index}`}
-              href={`/${locale}/units/${item.slug}`}
-              tabIndex={original ? 0 : -1}
-              aria-hidden={original ? undefined : true}
-              className="rail-item group relative block w-[70vw] max-w-[560px] sm:w-[46vw] md:w-[36vw] lg:w-[30vw]"
-            >
-              <div className="relative aspect-4/3 w-full">
-                <Image
-                  src={item.image}
-                  alt={item.name}
-                  fill
-                  priority={index === items.length}
-                  sizes="(min-width: 1024px) 34vw, (min-width: 640px) 46vw, 70vw"
-                  className="object-contain"
-                  draggable={false}
-                />
-              </div>
-
-              {/* Caption only reads once the card reaches the centre of the rail */}
-              <div data-caption className="pointer-events-none mt-3 text-center">
-                <p className="text-sm font-light tracking-[0.02em] md:text-base">{item.name}</p>
-                <p className="mt-1 text-sm text-ink-40">
-                  <span className="me-1">{t.common.from}</span>
-                  {formatPrice(item.price, locale)}
-                </p>
-              </div>
-            </Link>
-          );
-        })}
+        {items.map((item, index) => (
+          <Link
+            key={item.slug}
+            ref={(node) => {
+              cardRefs.current[index] = node;
+            }}
+            href={`/${locale}/units/${item.slug}`}
+            onFocus={() => bringForward(index)}
+            onMouseEnter={() => bringForward(index)}
+            aria-label={item.name}
+            className="absolute start-1/2 top-1/2 -ms-[32vw] -mt-[14vw] block w-[64vw] max-w-[520px] transition-[filter] duration-300 will-change-transform sm:-ms-[23vw] sm:-mt-[10vw] sm:w-[46vw] lg:-ms-[16vw] lg:-mt-[7vw] lg:w-[32vw]"
+            style={{ transform: "translate3d(0,0,0) scale(0.5)", opacity: 0 }}
+            draggable={false}
+          >
+            <div className="relative aspect-4/3 w-full">
+              <Image
+                src={item.image}
+                alt=""
+                fill
+                priority={index === 0}
+                sizes="(min-width: 1024px) 32vw, (min-width: 640px) 46vw, 64vw"
+                className="object-contain drop-shadow-[0_26px_42px_rgba(26,26,26,0.14)]"
+                draggable={false}
+              />
+            </div>
+          </Link>
+        ))}
       </div>
+
+      {/* The unit at the front of the orbit names itself */}
+      {focused && (
+        <div className="relative z-[120] mx-auto -mt-2 max-w-[42ch] px-5 text-center">
+          <div key={focused.slug} style={{ animation: "glara-fade-up 0.55s var(--ease-luxe) both" }}>
+            <p className="eyebrow text-gold">{focused.collection}</p>
+            <h2 className="mt-2 text-lg font-light tracking-[0.02em] md:text-2xl">{focused.name}</h2>
+            <p className="mt-2 text-sm leading-relaxed text-ink-60 md:text-base">{focused.tagline}</p>
+
+            <div className="mt-3 flex items-center justify-center gap-4">
+              <p className="text-sm text-ink-40">
+                <span className="me-1">{t.common.from}</span>
+                <span className="text-ink">{formatPrice(focused.price, locale)}</span>
+              </p>
+              {focused.swatches.length > 0 && (
+                <span className="flex gap-1.5" aria-hidden="true">
+                  {focused.swatches.slice(0, 4).map((finish) => (
+                    <span
+                      key={finish.key}
+                      className="h-3 w-3 rounded-full border border-line"
+                      style={{ backgroundColor: finish.swatch }}
+                    />
+                  ))}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       <button
         type="button"
         onClick={() => nudge(-1)}
         aria-label={t.common.previous}
-        className="absolute left-2 top-[38%] hidden h-11 w-11 place-items-center rounded-full border border-line bg-white/80 text-ink-60 backdrop-blur transition-colors hover:border-gold hover:text-gold md:grid"
+        className="absolute left-2 top-[38%] z-[130] hidden h-11 w-11 place-items-center rounded-full border border-line bg-white/80 text-ink-60 backdrop-blur transition-colors hover:border-gold hover:text-gold md:grid"
       >
         <ChevronLeftIcon size={18} />
       </button>
@@ -229,7 +236,7 @@ export function HeroCarousel({ items }: { items: HeroItem[] }) {
         type="button"
         onClick={() => nudge(1)}
         aria-label={t.common.next}
-        className="absolute right-2 top-[38%] hidden h-11 w-11 place-items-center rounded-full border border-line bg-white/80 text-ink-60 backdrop-blur transition-colors hover:border-gold hover:text-gold md:grid"
+        className="absolute right-2 top-[38%] z-[130] hidden h-11 w-11 place-items-center rounded-full border border-line bg-white/80 text-ink-60 backdrop-blur transition-colors hover:border-gold hover:text-gold md:grid"
       >
         <ChevronRightIcon size={18} />
       </button>
