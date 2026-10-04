@@ -2,6 +2,7 @@ import { randomBytes } from "node:crypto";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import materials from "./materials.json";
+import { catalogue2026 } from "./catalogue-2026";
 
 const prisma = new PrismaClient();
 
@@ -103,7 +104,7 @@ type ProductSeed = {
   images: Array<{ url: string; alt: string; finishKey?: string }>;
 };
 
-const products: ProductSeed[] = [
+const core: ProductSeed[] = [
   {
     slug: "linea-floating-vanity",
     name: "Linea Floating Vanity",
@@ -449,6 +450,8 @@ const products: ProductSeed[] = [
     ],
   },
 ];
+
+const products: ProductSeed[] = [...core, ...catalogue2026];
 
 /**
  * The shade card is reference data, not catalogue data: it is upserted rather
