@@ -92,7 +92,7 @@ export const catalogue2026 = [
     sizes: standard,
     images: [
       { url: "/products/verde-floating-vanity-01.webp", alt: "Verde floating vanity in emerald matte", finishKey: "matte" },
-      { url: "/products/verde-floating-vanity-02.webp", alt: "Verde vanity, front elevation" },
+      { url: "/products/verde-floating-vanity-02.webp", alt: "Verde vanity, front elevation", elevation: true },
     ],
   },
   {
@@ -120,7 +120,7 @@ export const catalogue2026 = [
     sizes: standard,
     images: [
       { url: "/products/basalt-stone-vanity-01.webp", alt: "Basalt stone vanity in dark grey", finishKey: "matte" },
-      { url: "/products/basalt-stone-vanity-02.webp", alt: "Basalt vanity, front elevation" },
+      { url: "/products/basalt-stone-vanity-02.webp", alt: "Basalt vanity, front elevation", elevation: true },
     ],
   },
   {
@@ -147,7 +147,7 @@ export const catalogue2026 = [
     sizes: standard.slice(0, 3),
     images: [
       { url: "/products/dune-sand-vanity-01.webp", alt: "Dune sand vanity in suede beige", finishKey: "matte" },
-      { url: "/products/dune-sand-vanity-02.webp", alt: "Dune vanity, front elevation" },
+      { url: "/products/dune-sand-vanity-02.webp", alt: "Dune vanity, front elevation", elevation: true },
     ],
   },
   {
@@ -175,7 +175,7 @@ export const catalogue2026 = [
     sizes: wide,
     images: [
       { url: "/products/vela-fluted-oak-vanity-01.webp", alt: "Vela fluted oak vanity", finishKey: "wood" },
-      { url: "/products/vela-fluted-oak-vanity-02.webp", alt: "Vela fluted vanity, front elevation" },
+      { url: "/products/vela-fluted-oak-vanity-02.webp", alt: "Vela fluted vanity, front elevation", elevation: true },
     ],
   },
   {
@@ -203,7 +203,7 @@ export const catalogue2026 = [
     sizes: doubleSizes,
     images: [
       { url: "/products/luna-double-vanity-01.webp", alt: "Luna double vanity in gloss white", finishKey: "gloss" },
-      { url: "/products/luna-double-vanity-02.webp", alt: "Luna double vanity, front elevation" },
+      { url: "/products/luna-double-vanity-02.webp", alt: "Luna double vanity, front elevation", elevation: true },
     ],
   },
   {
@@ -230,7 +230,7 @@ export const catalogue2026 = [
     sizes: wide,
     images: [
       { url: "/products/cairo-terrazzo-vanity-01.webp", alt: "Cairo terrazzo vanity", finishKey: "matte" },
-      { url: "/products/cairo-terrazzo-vanity-02.webp", alt: "Cairo terrazzo vanity, front elevation" },
+      { url: "/products/cairo-terrazzo-vanity-02.webp", alt: "Cairo terrazzo vanity, front elevation", elevation: true },
     ],
   },
   {
@@ -257,7 +257,7 @@ export const catalogue2026 = [
     sizes: compact,
     images: [
       { url: "/products/siwa-compact-vanity-01.webp", alt: "Siwa compact cloakroom vanity", finishKey: "matte" },
-      { url: "/products/siwa-compact-vanity-02.webp", alt: "Siwa compact vanity, front elevation" },
+      { url: "/products/siwa-compact-vanity-02.webp", alt: "Siwa compact vanity, front elevation", elevation: true },
     ],
   },
   {
@@ -283,7 +283,7 @@ export const catalogue2026 = [
     sizes: standard.slice(0, 3),
     images: [
       { url: "/products/mono-concrete-vanity-01.webp", alt: "Mono concrete-effect vanity", finishKey: "matte" },
-      { url: "/products/mono-concrete-vanity-02.webp", alt: "Mono concrete vanity, front elevation" },
+      { url: "/products/mono-concrete-vanity-02.webp", alt: "Mono concrete vanity, front elevation", elevation: true },
     ],
   },
   {
@@ -310,7 +310,7 @@ export const catalogue2026 = [
     sizes: wide,
     images: [
       { url: "/products/ruba-marble-vanity-01.webp", alt: "Ruba marble-top vanity", finishKey: "matte" },
-      { url: "/products/ruba-marble-vanity-02.webp", alt: "Ruba marble vanity, front elevation" },
+      { url: "/products/ruba-marble-vanity-02.webp", alt: "Ruba marble vanity, front elevation", elevation: true },
     ],
   },
   {
@@ -338,7 +338,7 @@ export const catalogue2026 = [
     sizes: doubleSizes,
     images: [
       { url: "/products/atlas-walnut-double-vanity-01.webp", alt: "Atlas walnut double vanity", finishKey: "wood" },
-      { url: "/products/atlas-walnut-double-vanity-02.webp", alt: "Atlas walnut double vanity, front elevation" },
+      { url: "/products/atlas-walnut-double-vanity-02.webp", alt: "Atlas walnut double vanity, front elevation", elevation: true },
     ],
   },
 
@@ -422,7 +422,7 @@ export const catalogue2026 = [
     sizes: tallOnly,
     images: [
       { url: "/products/vela-fluted-tall-cabinet-01.webp", alt: "Vela fluted oak tall cabinet", finishKey: "wood" },
-      { url: "/products/vela-fluted-tall-cabinet-02.webp", alt: "Vela tall cabinet, front elevation" },
+      { url: "/products/vela-fluted-tall-cabinet-02.webp", alt: "Vela tall cabinet, front elevation", elevation: true },
     ],
   },
 ];

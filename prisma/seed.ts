@@ -101,7 +101,9 @@ type ProductSeed = {
   specs: Spec[];
   finishes: FinishSeed[];
   sizes: SizeSeed[];
-  images: Array<{ url: string; alt: string; finishKey?: string }>;
+  // `elevation` marks a shot squared on to the unit: what the hero orbit wants,
+  // where a three-quarter view would read as a tilted unit on the ring.
+  images: Array<{ url: string; alt: string; finishKey?: string; elevation?: boolean }>;
 };
 
 const core: ProductSeed[] = [
@@ -129,7 +131,7 @@ const core: ProductSeed[] = [
     ],
     sizes: standardSizes,
     images: [
-      { url: "/products/linea-oak-01.png", alt: "Linea floating vanity in natural oak", finishKey: "wood" },
+      { url: "/products/linea-oak-01.png", alt: "Linea floating vanity in natural oak", finishKey: "wood", elevation: true },
       { url: "/products/linea-oak-02.png", alt: "Linea vanity, three-quarter view" },
       { url: "/products/linea-oak-03.png", alt: "Linea vanity drawer detail" },
       { url: "/products/linea-oak-04.png", alt: "Linea vanity with the drawer open" },
@@ -159,7 +161,7 @@ const core: ProductSeed[] = [
     ],
     sizes: standardSizes,
     images: [
-      { url: "/products/black-01.png", alt: "Onyx gloss vanity in black", finishKey: "gloss" },
+      { url: "/products/black-01.png", alt: "Onyx gloss vanity in black", finishKey: "gloss", elevation: true },
       { url: "/products/black-02.png", alt: "Onyx vanity, front elevation" },
       { url: "/products/black-03.png", alt: "Onyx vanity detail" },
     ],
@@ -216,7 +218,7 @@ const core: ProductSeed[] = [
     ],
     sizes: standardSizes.slice(1),
     images: [
-      { url: "/products/walnut-open-01.png", alt: "Terra open-shelf vanity in walnut", finishKey: "wood" },
+      { url: "/products/walnut-open-01.png", alt: "Terra open-shelf vanity in walnut", finishKey: "wood", elevation: true },
       { url: "/products/walnut-02.png", alt: "Terra vanity, side view" },
       { url: "/products/walnut-shelf-01.png", alt: "Terra vanity open shelf detail" },
     ],
@@ -244,7 +246,7 @@ const core: ProductSeed[] = [
     ],
     sizes: standardSizes.slice(1),
     images: [
-      { url: "/products/oak-wide-01.png", alt: "Nova oak vanity", finishKey: "wood" },
+      { url: "/products/oak-wide-01.png", alt: "Nova oak vanity", finishKey: "wood", elevation: true },
       { url: "/products/oak-wide-02.png", alt: "Nova vanity, wide view" },
       { url: "/products/oak-drawer-01.png", alt: "Nova vanity drawer detail" },
       { url: "/products/oak-drawer-02.png", alt: "Nova vanity front elevation" },
@@ -529,6 +531,7 @@ async function main() {
             url: image.url,
             alt: image.alt,
             finishKey: image.finishKey ?? null,
+            elevation: image.elevation ?? false,
             sortOrder: index,
           })),
         },

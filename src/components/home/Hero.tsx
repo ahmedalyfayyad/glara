@@ -5,6 +5,11 @@ import type { ProductListItem } from "@/lib/queries";
 /**
  * The wordmark is the page. Figma sets it at 405px on a 1290px canvas with a
  * 0.6 line-height, so it scales as 31.4vw and stops growing at the artboard size.
+ *
+ * The orbit turns each unit through its own arc, so the units themselves have to
+ * be squared on: a three-quarter shot already carries a perspective the ring then
+ * fights, and reads as a unit hung crooked. Hence the front elevation wherever
+ * one was shot, and the catalogue image only as a fallback.
  */
 export function Hero({ products, locale }: { products: ProductListItem[]; locale: Locale }) {
   const t = getDictionary(locale);
@@ -14,7 +19,7 @@ export function Hero({ products, locale }: { products: ProductListItem[]; locale
     name: locale === "ar" ? product.nameAr : product.name,
     tagline: locale === "ar" ? product.taglineAr : product.tagline,
     collection: locale === "ar" ? product.collectionAr : product.collection,
-    image: product.image,
+    image: product.elevationImage ?? product.image,
     price: product.basePrice,
     swatches: product.swatches.map((finish) => ({ key: finish.key, swatch: finish.swatch })),
   }));

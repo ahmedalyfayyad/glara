@@ -62,6 +62,7 @@ model ProductImage {
   url       String
   alt       String
   finishKey String? // when the shot belongs to a specific finish
+  elevation Boolean @default(false) // squared on to the unit, no perspective
   sortOrder Int     @default(0)
 
   @@index([productId])

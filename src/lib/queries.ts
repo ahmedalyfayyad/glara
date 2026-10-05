@@ -17,6 +17,8 @@ export type ProductListItem = {
   image: string;
   imageAlt: string;
   hoverImage: string | null;
+  /** The shot squared on to the unit, where one was taken. */
+  elevationImage: string | null;
   finishKeys: string[];
   swatches: Array<{ key: string; swatch: string; label: string; labelAr: string }>;
 };
@@ -34,7 +36,10 @@ const listSelect = {
   basePrice: true,
   isNew: true,
   featured: true,
-  images: { orderBy: { sortOrder: "asc" }, select: { url: true, alt: true } },
+  images: {
+    orderBy: { sortOrder: "asc" },
+    select: { url: true, alt: true, elevation: true },
+  },
   finishes: {
     orderBy: { sortOrder: "asc" },
     select: { key: true, swatch: true, label: true, labelAr: true },
@@ -54,7 +59,7 @@ type ListRow = {
   basePrice: number;
   isNew: boolean;
   featured: boolean;
-  images: Array<{ url: string; alt: string }>;
+  images: Array<{ url: string; alt: string; elevation: boolean }>;
   finishes: Array<{ key: string; swatch: string; label: string; labelAr: string }>;
 };
 
@@ -75,6 +80,7 @@ function toListItem(row: ListRow): ProductListItem {
     image: row.images[0]?.url ?? "/products/linea-oak-01.png",
     imageAlt: row.images[0]?.alt ?? row.name,
     hoverImage: row.images[1]?.url ?? null,
+    elevationImage: row.images.find((image) => image.elevation)?.url ?? null,
     finishKeys: row.finishes.map((finish) => finish.key),
     swatches: row.finishes,
   };
