@@ -4,6 +4,7 @@ import { CustomizeLab, type LabProduct } from "@/components/lab/CustomizeLab";
 import { labProducts, localised } from "@/lib/queries";
 import { listMaterials } from "@/lib/materials";
 import { getDictionary, type Locale, toLocale } from "@/i18n";
+import { localeAlternates } from "@/lib/site";
 
 export async function generateMetadata({
   params,
@@ -16,7 +17,7 @@ export async function generateMetadata({
   return {
     title: t.meta.customizeTitle,
     description: t.lab.subtitle,
-    alternates: { canonical: `/${locale}/customize` },
+    alternates: localeAlternates(locale, "/customize"),
   };
 }
 

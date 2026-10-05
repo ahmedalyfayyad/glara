@@ -9,7 +9,7 @@ import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getDictionary, type Locale, toLocale } from "@/i18n";
 import { CURRENCY } from "@/lib/money";
-import { siteUrl } from "@/lib/site";
+import { localeAlternates, siteUrl } from "@/lib/site";
 import { parseSpecs } from "@/lib/utils";
 
 export async function generateMetadata({
@@ -28,7 +28,7 @@ export async function generateMetadata({
   return {
     title: name,
     description: tagline,
-    alternates: { canonical: `/${locale}/units/${slug}` },
+    alternates: localeAlternates(locale, `/units/${slug}`),
     openGraph: {
       title: name,
       description: tagline,

@@ -3,6 +3,7 @@ import { PageTitle } from "@/components/site/PageTitle";
 import { ContactForm } from "@/components/site/ContactForm";
 import { MailIcon, MapPinIcon, PhoneIcon } from "@/components/icons";
 import { getDictionary, type Locale, toLocale } from "@/i18n";
+import { localeAlternates } from "@/lib/site";
 
 export async function generateMetadata({
   params,
@@ -15,7 +16,7 @@ export async function generateMetadata({
   return {
     title: t.contact.title,
     description: t.contact.subtitle,
-    alternates: { canonical: `/${locale}/contact` },
+    alternates: localeAlternates(locale, "/contact"),
   };
 }
 

@@ -9,6 +9,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { listProducts, type ProductFilters } from "@/lib/queries";
 import { getDictionary, type Locale, toLocale } from "@/i18n";
+import { localeAlternates } from "@/lib/site";
 
 type Search = { type?: string; finish?: string; q?: string; sort?: string };
 
@@ -20,7 +21,7 @@ export async function generateMetadata({
   const { locale: localeParam } = await params;
   const locale = toLocale(localeParam);
   const t = getDictionary(locale);
-  return { title: t.meta.unitsTitle, alternates: { canonical: `/${locale}/units` } };
+  return { title: t.meta.unitsTitle, alternates: localeAlternates(locale, "/units") };
 }
 
 const SORTS = new Set(["featured", "priceAsc", "priceDesc", "newest"]);

@@ -11,7 +11,7 @@ import { getDictionary } from "@/i18n";
 import { isLocale, locales, localeDirection, type Locale } from "@/i18n/config";
 import { getSessionUser } from "@/lib/auth";
 import { readCart } from "@/lib/cart";
-import { siteUrl } from "@/lib/site";
+import { localeAlternates, siteUrl } from "@/lib/site";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -58,11 +58,7 @@ export async function generateMetadata({
     metadataBase: new URL(base),
     title: { default: t.meta.homeTitle, template: `%s — ${t.meta.siteName}` },
     description: t.meta.description,
-    alternates: {
-      canonical: `/${locale}`,
-      // x-default names the version to serve a reader whose language we do not publish.
-      languages: { en: "/en", ar: "/ar", "x-default": "/en" },
-    },
+    alternates: localeAlternates(locale),
     openGraph: {
       title: t.meta.homeTitle,
       description: t.meta.description,

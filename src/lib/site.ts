@@ -1,3 +1,5 @@
+import { defaultLocale, locales } from "@/i18n/config";
+
 /**
  * Canonical origin for metadata, sitemap, robots and JSON-LD.
  *
@@ -13,4 +15,26 @@ export function siteUrl(): string {
   if (vercel) return `https://${vercel.replace(/\/+$/, "")}`;
 
   return "http://localhost:3000";
+}
+
+/**
+ * Canonical plus hreflang alternates for one page.
+ *
+ * Next replaces `alternates` wholesale rather than merging it: a page that set
+ * only a canonical dropped the languages map the layout had declared, which is
+ * how every route below the home page lost its hreflang. Building both here
+ * keeps them together, so a page cannot set one and silently discard the other.
+ *
+ * `path` is whatever follows the locale segment — "/units", or "" for the
+ * locale root. Every route exists under each locale at the same path, which is
+ * what makes the pairing a straight substitution.
+ */
+export function localeAlternates(locale: string, path: string = "") {
+  const languages = Object.fromEntries(locales.map((code) => [code, `/${code}${path}`]));
+
+  return {
+    canonical: `/${locale}${path}`,
+    // x-default names the version to serve a reader whose language we do not publish.
+    languages: { ...languages, "x-default": `/${defaultLocale}${path}` },
+  };
 }

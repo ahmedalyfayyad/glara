@@ -6,6 +6,7 @@ import { Accordion } from "@/components/ui/Accordion";
 import { Reveal } from "@/components/ui/Reveal";
 import { ButtonLink } from "@/components/ui/Button";
 import { getDictionary, locales, type Locale, toLocale } from "@/i18n";
+import { localeAlternates } from "@/lib/site";
 
 const TOPICS = ["installation", "warranty", "care", "faqs"] as const;
 type Topic = (typeof TOPICS)[number];
@@ -27,7 +28,7 @@ export async function generateMetadata({
   return {
     title: entry.title,
     description: entry.intro,
-    alternates: { canonical: `/${locale}/support/${topic}` },
+    alternates: localeAlternates(locale, `/support/${topic}`),
   };
 }
 
