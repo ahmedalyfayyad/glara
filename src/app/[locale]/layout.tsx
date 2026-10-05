@@ -60,15 +60,33 @@ export async function generateMetadata({
     description: t.meta.description,
     alternates: {
       canonical: `/${locale}`,
-      languages: { en: "/en", ar: "/ar" },
+      // x-default names the version to serve a reader whose language we do not publish.
+      languages: { en: "/en", ar: "/ar", "x-default": "/en" },
     },
     openGraph: {
       title: t.meta.homeTitle,
       description: t.meta.description,
       siteName: t.meta.siteName,
       locale: locale === "ar" ? "ar_EG" : "en_US",
+      alternateLocale: locale === "ar" ? "en_US" : "ar_EG",
+      url: `${base}/${locale}`,
       type: "website",
     },
+    twitter: {
+      card: "summary_large_image",
+      title: t.meta.homeTitle,
+      description: t.meta.description,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+    },
+    // Search Console issues a token per property; it comes from the environment
+    // rather than the repo so one build can verify more than one property.
+    verification: process.env.GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+      : undefined,
     icons: { icon: "/favicon.svg" },
   };
 }

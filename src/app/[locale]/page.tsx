@@ -19,15 +19,46 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     featuredProducts(6),
   ]);
 
+  const base = siteUrl();
+
+  /*
+   * Two graph nodes rather than one: the Organization is the business, the
+   * WebSite is this site. The search action is what lets Google offer a search
+   * box under the result instead of only the homepage link.
+   */
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "GLARA",
-    description: t.meta.description,
-    url: siteUrl(),
-    address: { "@type": "PostalAddress", addressLocality: "Cairo", addressCountry: "EG" },
-    telephone: "+201011911502",
-    email: "info@glara-eg.com",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${base}/#organization`,
+        name: "GLARA",
+        description: t.meta.description,
+        url: base,
+        logo: `${base}/${locale}/opengraph-image`,
+        address: { "@type": "PostalAddress", addressLocality: "Cairo", addressCountry: "EG" },
+        telephone: "+201011911502",
+        email: "info@glara-eg.com",
+        areaServed: "EG",
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${base}/#website`,
+        url: base,
+        name: t.meta.siteName,
+        description: t.meta.description,
+        inLanguage: locale === "ar" ? "ar-EG" : "en",
+        publisher: { "@id": `${base}/#organization` },
+        potentialAction: {
+          "@type": "SearchAction",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: `${base}/${locale}/units?q={search_term_string}`,
+          },
+          "query-input": "required name=search_term_string",
+        },
+      },
+    ],
   };
 
   return (

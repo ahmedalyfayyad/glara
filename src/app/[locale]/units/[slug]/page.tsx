@@ -9,6 +9,7 @@ import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getDictionary, type Locale, toLocale } from "@/i18n";
 import { CURRENCY } from "@/lib/money";
+import { siteUrl } from "@/lib/site";
 import { parseSpecs } from "@/lib/utils";
 
 export async function generateMetadata({
@@ -107,8 +108,28 @@ export default async function ProductPage({
     },
   };
 
+  const base = siteUrl();
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: t.meta.siteName, item: `${base}/${locale}` },
+      { "@type": "ListItem", position: 2, name: t.units.title, item: `${base}/${locale}/units` },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: detail.name,
+        item: `${base}/${locale}/units/${slug}`,
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
