@@ -4,7 +4,9 @@
  *
  * Renders in `public/products/` for these units were generated from the studio's
  * own catalogue shots as style references — same white sweep, same lighting, same
- * three-quarter framing — so the grid reads as one range rather than two.
+ * three-quarter framing — so the grid reads as one range rather than two. The
+ * sweep was then matted out, so they carry an alpha channel like the Figma
+ * exports beside them and the contact shadow survives as transparent black.
  */
 
 type Spec = { label: string; labelAr: string; value: string; valueAr: string };
@@ -84,13 +86,13 @@ export const catalogue2026 = [
     sortOrder: 13,
     specs: specs("80 · 100 · 120 · 140 cm", "48 cm", "50 cm"),
     finishes: [
-      { key: "matte", label: "Emerald Matte", labelAr: "زمردي مطفي", swatch: "#0f4536", imageUrl: "/products/verde-floating-vanity-01.jpg" },
-      { key: "gloss", label: "Emerald Gloss", labelAr: "زمردي لامع", swatch: "#0b5a42", imageUrl: "/products/verde-floating-vanity-02.jpg", priceDelta: 210 },
+      { key: "matte", label: "Emerald Matte", labelAr: "زمردي مطفي", swatch: "#0f4536", imageUrl: "/products/verde-floating-vanity-01.webp" },
+      { key: "gloss", label: "Emerald Gloss", labelAr: "زمردي لامع", swatch: "#0b5a42", imageUrl: "/products/verde-floating-vanity-02.webp", priceDelta: 210 },
     ],
     sizes: standard,
     images: [
-      { url: "/products/verde-floating-vanity-01.jpg", alt: "Verde floating vanity in emerald matte", finishKey: "matte" },
-      { url: "/products/verde-floating-vanity-02.jpg", alt: "Verde vanity, front elevation" },
+      { url: "/products/verde-floating-vanity-01.webp", alt: "Verde floating vanity in emerald matte", finishKey: "matte" },
+      { url: "/products/verde-floating-vanity-02.webp", alt: "Verde vanity, front elevation" },
     ],
   },
   {
@@ -112,13 +114,13 @@ export const catalogue2026 = [
     sortOrder: 14,
     specs: specs("80 · 100 · 120 · 140 cm", "48 cm", "50 cm"),
     finishes: [
-      { key: "matte", label: "Basalt Grey", labelAr: "رمادي بازلتي", swatch: "#3c3f44", imageUrl: "/products/basalt-stone-vanity-01.jpg" },
-      { key: "gloss", label: "Basalt Polished", labelAr: "بازلت مصقول", swatch: "#2f3338", imageUrl: "/products/basalt-stone-vanity-02.jpg", priceDelta: 240 },
+      { key: "matte", label: "Basalt Grey", labelAr: "رمادي بازلتي", swatch: "#3c3f44", imageUrl: "/products/basalt-stone-vanity-01.webp" },
+      { key: "gloss", label: "Basalt Polished", labelAr: "بازلت مصقول", swatch: "#2f3338", imageUrl: "/products/basalt-stone-vanity-02.webp", priceDelta: 240 },
     ],
     sizes: standard,
     images: [
-      { url: "/products/basalt-stone-vanity-01.jpg", alt: "Basalt stone vanity in dark grey", finishKey: "matte" },
-      { url: "/products/basalt-stone-vanity-02.jpg", alt: "Basalt vanity, front elevation" },
+      { url: "/products/basalt-stone-vanity-01.webp", alt: "Basalt stone vanity in dark grey", finishKey: "matte" },
+      { url: "/products/basalt-stone-vanity-02.webp", alt: "Basalt vanity, front elevation" },
     ],
   },
   {
@@ -139,13 +141,13 @@ export const catalogue2026 = [
     sortOrder: 15,
     specs: specs("80 · 100 · 120 cm", "46 cm", "50 cm"),
     finishes: [
-      { key: "matte", label: "Sand Suede", labelAr: "شامواه رملي", swatch: "#cbb89a", imageUrl: "/products/dune-sand-vanity-01.jpg" },
-      { key: "wood", label: "Sand & Oak", labelAr: "رملي وبلوط", swatch: "#c3a071", imageUrl: "/products/dune-sand-vanity-02.jpg" },
+      { key: "matte", label: "Sand Suede", labelAr: "شامواه رملي", swatch: "#cbb89a", imageUrl: "/products/dune-sand-vanity-01.webp" },
+      { key: "wood", label: "Sand & Oak", labelAr: "رملي وبلوط", swatch: "#c3a071", imageUrl: "/products/dune-sand-vanity-02.webp" },
     ],
     sizes: standard.slice(0, 3),
     images: [
-      { url: "/products/dune-sand-vanity-01.jpg", alt: "Dune sand vanity in suede beige", finishKey: "matte" },
-      { url: "/products/dune-sand-vanity-02.jpg", alt: "Dune vanity, front elevation" },
+      { url: "/products/dune-sand-vanity-01.webp", alt: "Dune sand vanity in suede beige", finishKey: "matte" },
+      { url: "/products/dune-sand-vanity-02.webp", alt: "Dune vanity, front elevation" },
     ],
   },
   {
@@ -167,13 +169,13 @@ export const catalogue2026 = [
     sortOrder: 16,
     specs: specs("100 · 120 · 140 cm", "48 cm", "50 cm"),
     finishes: [
-      { key: "wood", label: "Natural Oak", labelAr: "بلوط طبيعي", swatch: "#d2ab76", imageUrl: "/products/vela-fluted-oak-vanity-01.jpg" },
-      { key: "matte", label: "Oak & Ivory", labelAr: "بلوط وعاجي", swatch: "#e5d9c4", imageUrl: "/products/vela-fluted-oak-vanity-02.jpg" },
+      { key: "wood", label: "Natural Oak", labelAr: "بلوط طبيعي", swatch: "#d2ab76", imageUrl: "/products/vela-fluted-oak-vanity-01.webp" },
+      { key: "matte", label: "Oak & Ivory", labelAr: "بلوط وعاجي", swatch: "#e5d9c4", imageUrl: "/products/vela-fluted-oak-vanity-02.webp" },
     ],
     sizes: wide,
     images: [
-      { url: "/products/vela-fluted-oak-vanity-01.jpg", alt: "Vela fluted oak vanity", finishKey: "wood" },
-      { url: "/products/vela-fluted-oak-vanity-02.jpg", alt: "Vela fluted vanity, front elevation" },
+      { url: "/products/vela-fluted-oak-vanity-01.webp", alt: "Vela fluted oak vanity", finishKey: "wood" },
+      { url: "/products/vela-fluted-oak-vanity-02.webp", alt: "Vela fluted vanity, front elevation" },
     ],
   },
   {
@@ -195,13 +197,13 @@ export const catalogue2026 = [
     sortOrder: 17,
     specs: specs("140 · 160 · 180 cm", "50 cm", "50 cm"),
     finishes: [
-      { key: "gloss", label: "Gloss White", labelAr: "أبيض لامع", swatch: "#ffffff", imageUrl: "/products/luna-double-vanity-01.jpg" },
-      { key: "matte", label: "Matte White", labelAr: "أبيض مطفي", swatch: "#eceae6", imageUrl: "/products/luna-double-vanity-02.jpg" },
+      { key: "gloss", label: "Gloss White", labelAr: "أبيض لامع", swatch: "#ffffff", imageUrl: "/products/luna-double-vanity-01.webp" },
+      { key: "matte", label: "Matte White", labelAr: "أبيض مطفي", swatch: "#eceae6", imageUrl: "/products/luna-double-vanity-02.webp" },
     ],
     sizes: doubleSizes,
     images: [
-      { url: "/products/luna-double-vanity-01.jpg", alt: "Luna double vanity in gloss white", finishKey: "gloss" },
-      { url: "/products/luna-double-vanity-02.jpg", alt: "Luna double vanity, front elevation" },
+      { url: "/products/luna-double-vanity-01.webp", alt: "Luna double vanity in gloss white", finishKey: "gloss" },
+      { url: "/products/luna-double-vanity-02.webp", alt: "Luna double vanity, front elevation" },
     ],
   },
   {
@@ -222,13 +224,13 @@ export const catalogue2026 = [
     sortOrder: 18,
     specs: specs("100 · 120 · 140 cm", "48 cm", "52 cm"),
     finishes: [
-      { key: "matte", label: "Ivory Terrazzo", labelAr: "تيرازو عاجي", swatch: "#ded5c2", imageUrl: "/products/cairo-terrazzo-vanity-01.jpg" },
-      { key: "gloss", label: "Polished Terrazzo", labelAr: "تيرازو مصقول", swatch: "#cfc6b2", imageUrl: "/products/cairo-terrazzo-vanity-02.jpg", priceDelta: 260 },
+      { key: "matte", label: "Ivory Terrazzo", labelAr: "تيرازو عاجي", swatch: "#ded5c2", imageUrl: "/products/cairo-terrazzo-vanity-01.webp" },
+      { key: "gloss", label: "Polished Terrazzo", labelAr: "تيرازو مصقول", swatch: "#cfc6b2", imageUrl: "/products/cairo-terrazzo-vanity-02.webp", priceDelta: 260 },
     ],
     sizes: wide,
     images: [
-      { url: "/products/cairo-terrazzo-vanity-01.jpg", alt: "Cairo terrazzo vanity", finishKey: "matte" },
-      { url: "/products/cairo-terrazzo-vanity-02.jpg", alt: "Cairo terrazzo vanity, front elevation" },
+      { url: "/products/cairo-terrazzo-vanity-01.webp", alt: "Cairo terrazzo vanity", finishKey: "matte" },
+      { url: "/products/cairo-terrazzo-vanity-02.webp", alt: "Cairo terrazzo vanity, front elevation" },
     ],
   },
   {
@@ -249,13 +251,13 @@ export const catalogue2026 = [
     sortOrder: 19,
     specs: specs("60 · 80 cm", "38 cm", "46 cm"),
     finishes: [
-      { key: "matte", label: "Matte White", labelAr: "أبيض مطفي", swatch: "#f2f1ee", imageUrl: "/products/siwa-compact-vanity-01.jpg" },
-      { key: "wood", label: "Warm Oak", labelAr: "بلوط دافئ", swatch: "#c3a071", imageUrl: "/products/siwa-compact-vanity-02.jpg" },
+      { key: "matte", label: "Matte White", labelAr: "أبيض مطفي", swatch: "#f2f1ee", imageUrl: "/products/siwa-compact-vanity-01.webp" },
+      { key: "wood", label: "Warm Oak", labelAr: "بلوط دافئ", swatch: "#c3a071", imageUrl: "/products/siwa-compact-vanity-02.webp" },
     ],
     sizes: compact,
     images: [
-      { url: "/products/siwa-compact-vanity-01.jpg", alt: "Siwa compact cloakroom vanity", finishKey: "matte" },
-      { url: "/products/siwa-compact-vanity-02.jpg", alt: "Siwa compact vanity, front elevation" },
+      { url: "/products/siwa-compact-vanity-01.webp", alt: "Siwa compact cloakroom vanity", finishKey: "matte" },
+      { url: "/products/siwa-compact-vanity-02.webp", alt: "Siwa compact vanity, front elevation" },
     ],
   },
   {
@@ -275,13 +277,13 @@ export const catalogue2026 = [
     sortOrder: 20,
     specs: specs("80 · 100 · 120 cm", "48 cm", "50 cm"),
     finishes: [
-      { key: "matte", label: "Pale Concrete", labelAr: "أسمنتي فاتح", swatch: "#b9b7b2", imageUrl: "/products/mono-concrete-vanity-01.jpg" },
-      { key: "gloss", label: "Dark Concrete", labelAr: "أسمنتي داكن", swatch: "#6f6e6b", imageUrl: "/products/mono-concrete-vanity-02.jpg" },
+      { key: "matte", label: "Pale Concrete", labelAr: "أسمنتي فاتح", swatch: "#b9b7b2", imageUrl: "/products/mono-concrete-vanity-01.webp" },
+      { key: "gloss", label: "Dark Concrete", labelAr: "أسمنتي داكن", swatch: "#6f6e6b", imageUrl: "/products/mono-concrete-vanity-02.webp" },
     ],
     sizes: standard.slice(0, 3),
     images: [
-      { url: "/products/mono-concrete-vanity-01.jpg", alt: "Mono concrete-effect vanity", finishKey: "matte" },
-      { url: "/products/mono-concrete-vanity-02.jpg", alt: "Mono concrete vanity, front elevation" },
+      { url: "/products/mono-concrete-vanity-01.webp", alt: "Mono concrete-effect vanity", finishKey: "matte" },
+      { url: "/products/mono-concrete-vanity-02.webp", alt: "Mono concrete vanity, front elevation" },
     ],
   },
   {
@@ -302,13 +304,13 @@ export const catalogue2026 = [
     sortOrder: 21,
     specs: specs("100 · 120 · 140 cm", "50 cm", "52 cm"),
     finishes: [
-      { key: "matte", label: "Carrara & White", labelAr: "كرارا وأبيض", swatch: "#f4f3f1", imageUrl: "/products/ruba-marble-vanity-01.jpg" },
-      { key: "gloss", label: "Carrara & Gloss", labelAr: "كرارا ولامع", swatch: "#fbfbfb", imageUrl: "/products/ruba-marble-vanity-02.jpg", priceDelta: 230 },
+      { key: "matte", label: "Carrara & White", labelAr: "كرارا وأبيض", swatch: "#f4f3f1", imageUrl: "/products/ruba-marble-vanity-01.webp" },
+      { key: "gloss", label: "Carrara & Gloss", labelAr: "كرارا ولامع", swatch: "#fbfbfb", imageUrl: "/products/ruba-marble-vanity-02.webp", priceDelta: 230 },
     ],
     sizes: wide,
     images: [
-      { url: "/products/ruba-marble-vanity-01.jpg", alt: "Ruba marble-top vanity", finishKey: "matte" },
-      { url: "/products/ruba-marble-vanity-02.jpg", alt: "Ruba marble vanity, front elevation" },
+      { url: "/products/ruba-marble-vanity-01.webp", alt: "Ruba marble-top vanity", finishKey: "matte" },
+      { url: "/products/ruba-marble-vanity-02.webp", alt: "Ruba marble vanity, front elevation" },
     ],
   },
   {
@@ -330,13 +332,13 @@ export const catalogue2026 = [
     sortOrder: 22,
     specs: specs("140 · 160 · 180 cm", "50 cm", "50 cm"),
     finishes: [
-      { key: "wood", label: "Italian Walnut", labelAr: "جوز إيطالي", swatch: "#6b4a34", imageUrl: "/products/atlas-walnut-double-vanity-01.jpg" },
-      { key: "matte", label: "Walnut & Graphite", labelAr: "جوز وجرافيت", swatch: "#4a4038", imageUrl: "/products/atlas-walnut-double-vanity-02.jpg" },
+      { key: "wood", label: "Italian Walnut", labelAr: "جوز إيطالي", swatch: "#6b4a34", imageUrl: "/products/atlas-walnut-double-vanity-01.webp" },
+      { key: "matte", label: "Walnut & Graphite", labelAr: "جوز وجرافيت", swatch: "#4a4038", imageUrl: "/products/atlas-walnut-double-vanity-02.webp" },
     ],
     sizes: doubleSizes,
     images: [
-      { url: "/products/atlas-walnut-double-vanity-01.jpg", alt: "Atlas walnut double vanity", finishKey: "wood" },
-      { url: "/products/atlas-walnut-double-vanity-02.jpg", alt: "Atlas walnut double vanity, front elevation" },
+      { url: "/products/atlas-walnut-double-vanity-01.webp", alt: "Atlas walnut double vanity", finishKey: "wood" },
+      { url: "/products/atlas-walnut-double-vanity-02.webp", alt: "Atlas walnut double vanity, front elevation" },
     ],
   },
 
@@ -360,13 +362,13 @@ export const catalogue2026 = [
     sortOrder: 23,
     specs: specs("100 · 120 · 140 cm + 40 cm tower", "48 cm", "50 cm / 180 cm tower"),
     finishes: [
-      { key: "matte", label: "Emerald Matte", labelAr: "زمردي مطفي", swatch: "#0f4536", imageUrl: "/products/verde-vanity-tower-system-01.jpg" },
-      { key: "gloss", label: "Emerald Gloss", labelAr: "زمردي لامع", swatch: "#0b5a42", imageUrl: "/products/verde-vanity-tower-system-02.jpg", priceDelta: 280 },
+      { key: "matte", label: "Emerald Matte", labelAr: "زمردي مطفي", swatch: "#0f4536", imageUrl: "/products/verde-vanity-tower-system-01.webp" },
+      { key: "gloss", label: "Emerald Gloss", labelAr: "زمردي لامع", swatch: "#0b5a42", imageUrl: "/products/verde-vanity-tower-system-02.webp", priceDelta: 280 },
     ],
     sizes: towerSizes,
     images: [
-      { url: "/products/verde-vanity-tower-system-01.jpg", alt: "Verde vanity and tower in emerald", finishKey: "matte" },
-      { url: "/products/verde-vanity-tower-system-02.jpg", alt: "Verde system, front elevation" },
+      { url: "/products/verde-vanity-tower-system-01.webp", alt: "Verde vanity and tower in emerald", finishKey: "matte" },
+      { url: "/products/verde-vanity-tower-system-02.webp", alt: "Verde system, front elevation" },
     ],
   },
   {
@@ -387,13 +389,13 @@ export const catalogue2026 = [
     sortOrder: 24,
     specs: specs("100 · 120 · 140 cm + 40 cm tower", "48 cm", "50 cm / 180 cm tower"),
     finishes: [
-      { key: "matte", label: "Basalt Grey", labelAr: "رمادي بازلتي", swatch: "#3c3f44", imageUrl: "/products/basalt-vanity-tower-system-01.jpg" },
-      { key: "gloss", label: "Basalt Polished", labelAr: "بازلت مصقول", swatch: "#2f3338", imageUrl: "/products/basalt-vanity-tower-system-02.jpg", priceDelta: 300 },
+      { key: "matte", label: "Basalt Grey", labelAr: "رمادي بازلتي", swatch: "#3c3f44", imageUrl: "/products/basalt-vanity-tower-system-01.webp" },
+      { key: "gloss", label: "Basalt Polished", labelAr: "بازلت مصقول", swatch: "#2f3338", imageUrl: "/products/basalt-vanity-tower-system-02.webp", priceDelta: 300 },
     ],
     sizes: towerSizes,
     images: [
-      { url: "/products/basalt-vanity-tower-system-01.jpg", alt: "Basalt vanity and tower", finishKey: "matte" },
-      { url: "/products/basalt-vanity-tower-system-02.jpg", alt: "Basalt system, front elevation" },
+      { url: "/products/basalt-vanity-tower-system-01.webp", alt: "Basalt vanity and tower", finishKey: "matte" },
+      { url: "/products/basalt-vanity-tower-system-02.webp", alt: "Basalt system, front elevation" },
     ],
   },
   {
@@ -414,13 +416,13 @@ export const catalogue2026 = [
     sortOrder: 25,
     specs: specs("40 cm", "35 cm", "180 cm"),
     finishes: [
-      { key: "wood", label: "Natural Oak", labelAr: "بلوط طبيعي", swatch: "#d2ab76", imageUrl: "/products/vela-fluted-tall-cabinet-01.jpg" },
-      { key: "matte", label: "Ivory Fluted", labelAr: "عاجي مضلّع", swatch: "#e5d9c4", imageUrl: "/products/vela-fluted-tall-cabinet-02.jpg" },
+      { key: "wood", label: "Natural Oak", labelAr: "بلوط طبيعي", swatch: "#d2ab76", imageUrl: "/products/vela-fluted-tall-cabinet-01.webp" },
+      { key: "matte", label: "Ivory Fluted", labelAr: "عاجي مضلّع", swatch: "#e5d9c4", imageUrl: "/products/vela-fluted-tall-cabinet-02.webp" },
     ],
     sizes: tallOnly,
     images: [
-      { url: "/products/vela-fluted-tall-cabinet-01.jpg", alt: "Vela fluted oak tall cabinet", finishKey: "wood" },
-      { url: "/products/vela-fluted-tall-cabinet-02.jpg", alt: "Vela tall cabinet, front elevation" },
+      { url: "/products/vela-fluted-tall-cabinet-01.webp", alt: "Vela fluted oak tall cabinet", finishKey: "wood" },
+      { url: "/products/vela-fluted-tall-cabinet-02.webp", alt: "Vela tall cabinet, front elevation" },
     ],
   },
 ];
